@@ -10,12 +10,14 @@
 :root{--bg:#0d0d0d;--surface:#1a1a1a;--surface2:#242424;--border:#2e2e2e;--accent:#e63946;--accent2:#ff6b6b;--gold:#f4a261;--green:#2dc653;--blue:#4cc9f0;--purple:#9b5de5;--text:#f0f0f0;--muted:#888;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:480px;margin:0 auto;}
+
 #screen-login{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:30px;}
-.login-logo{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--accent);text-align:center;line-height:1.1;}
-.login-sub{color:var(--muted);font-size:13px;margin:8px 0 44px;text-align:center;}
+.login-logo{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--accent);text-align:center;line-height:1.1;margin-bottom:8px;}
+.login-sub{color:var(--muted);font-size:13px;margin-bottom:44px;text-align:center;}
 .login-btn{width:100%;padding:18px;border-radius:14px;border:none;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:14px;}
 .btn-animador{background:var(--accent);color:#fff;}
 .btn-cliente{background:var(--surface);color:var(--text);border:1px solid var(--border)!important;}
+
 .pin-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:999;align-items:center;justify-content:center;}
 .pin-modal.open{display:flex;}
 .pin-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 24px;width:90%;max-width:320px;}
@@ -28,6 +30,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .pin-btn{flex:1;padding:13px;border-radius:10px;border:none;font-size:14px;font-weight:700;cursor:pointer;}
 .pin-cancel{background:var(--surface2);color:var(--muted);}
 .pin-enter{background:var(--accent);color:#fff;}
+
 #screen-app{display:none;}
 header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .logo{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--accent);}
@@ -36,38 +39,37 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .chip-animador{background:#2e0a0a;color:var(--accent);}
 .chip-cliente{background:#0a1a2e;color:var(--blue);}
 .logout-btn{font-size:12px;color:var(--muted);cursor:pointer;padding:4px 8px;border:1px solid var(--border);border-radius:8px;}
+
 .tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;}
 .tab{flex:1;min-width:72px;padding:12px 6px;text-align:center;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;}
 .tab.active{color:var(--accent);border-bottom-color:var(--accent);}
 .tab-badge{display:inline-block;background:var(--accent);color:#fff;font-size:10px;font-weight:700;width:16px;height:16px;border-radius:50%;line-height:16px;text-align:center;margin-left:3px;vertical-align:middle;}
+
 .view{display:none;padding:16px;}
 .view.active{display:block;}
+
 .turno-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;}
-.turno-card.pendiente{border-left:4px solid var(--gold);}
-.turno-card.aprobado{border-left:4px solid var(--green);background:#111a11;}
+.turno-card.en-cola{border-left:4px solid var(--green);background:#111a11;}
 .turno-card.cantando{border-left:4px solid var(--accent);background:#1e0f0f;animation:pulse-red 2s infinite;}
 @keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(230,57,70,.4);}50%{box-shadow:0 0 0 8px rgba(230,57,70,0);}}
 .turno-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
 .drag-handle{font-size:22px;color:#444;cursor:grab;padding:0 10px 0 0;user-select:none;line-height:1;}
 .turno-info{flex:1;}
 .turno-nombre{font-weight:700;font-size:15px;}
-.turno-cancion{font-size:13px;color:var(--accent2);margin-top:3px;}
+.turno-canciones{font-size:13px;color:var(--accent2);margin-top:3px;}
 .turno-meta{font-size:12px;color:var(--muted);margin-top:3px;}
 .badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;white-space:nowrap;}
-.badge.pendiente{background:#3a2f00;color:var(--gold);}
-.badge.aprobado{background:#0a2e10;color:var(--green);}
+.badge.cola{background:#0a2e10;color:var(--green);}
 .badge.cantando{background:#2e0a0a;color:var(--accent2);}
 .nota-chip{display:inline-flex;gap:4px;background:#2a2000;color:var(--gold);font-size:11px;padding:3px 8px;border-radius:20px;margin-top:6px;}
 .genero-chip{display:inline-flex;gap:4px;background:#1a0a2e;color:var(--purple);font-size:11px;padding:3px 8px;border-radius:20px;margin-top:6px;margin-left:4px;}
 .turno-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
 .btn-sm{flex:1;min-width:58px;padding:8px 4px;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;}
-.btn-aprobar{background:var(--green);color:#000;}
 .btn-cantar{background:var(--accent);color:#fff;}
 .btn-listo{background:var(--surface2);color:var(--muted);}
-.btn-rechazar{background:#2e1010;color:var(--accent);border:1px solid var(--accent);}
+.btn-quitar{background:#2e1010;color:var(--accent);border:1px solid var(--accent);}
 .btn-mover{background:#1a1a2e;color:var(--blue);border:1px solid var(--blue);}
-.genre-edit{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;padding:8px 10px;margin-top:8px;outline:none;font-family:'Inter',sans-serif;}
-.genre-edit:focus{border-color:var(--purple);}
+
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
 .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;}
 .stat-num{font-family:'Bebas Neue',sans-serif;font-size:32px;line-height:1;}
@@ -77,6 +79,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .chart-bar-track{flex:1;background:var(--surface2);border-radius:20px;height:10px;overflow:hidden;}
 .chart-bar-fill{height:100%;border-radius:20px;transition:width .4s;}
 .chart-bar-count{font-size:12px;color:var(--muted);min-width:20px;text-align:right;}
+
 .form-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;}
 .form-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);margin-bottom:16px;}
 .field{margin-bottom:14px;}
@@ -86,13 +89,18 @@ input:focus,textarea:focus,select:focus{border-color:var(--accent);}
 textarea{resize:none;height:70px;}
 .btn-primary{width:100%;padding:15px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;margin-top:4px;}
 .success-msg{background:#0a2e10;border:1px solid var(--green);border-radius:10px;padding:14px;text-align:center;color:var(--green);font-weight:600;margin-top:16px;display:none;}
-.estado-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;}
-.estado-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.error-msg{background:#2e0a0a;border:1px solid var(--accent);border-radius:10px;padding:14px;text-align:center;color:var(--accent2);font-weight:600;margin-top:16px;display:none;}
+
+.escena-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;}
+.escena-label{font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;}
+.escena-text{font-weight:700;font-size:15px;color:var(--accent);}
+
 .hist-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-start;}
 .hist-left .name{font-weight:600;font-size:14px;}
 .hist-left .song{font-size:12px;color:var(--accent2);margin-top:2px;}
 .hist-right{font-size:12px;color:var(--muted);min-width:40px;text-align:right;}
 .btn-limpiar{width:100%;padding:12px;background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;margin-top:16px;}
+
 .qr-section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;}
 .qr-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);margin-bottom:4px;}
 .qr-sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
@@ -102,6 +110,7 @@ textarea{resize:none;height:70px;}
 .btn-copy{width:100%;padding:12px;background:var(--blue);color:#000;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;}
 .copy-ok{color:var(--green);font-size:13px;display:none;margin-top:4px;}
 .pin-change-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:16px;}
+
 .section-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:18px 0 10px;}
 .section-title:first-child{margin-top:0;}
 .empty{text-align:center;padding:50px 20px;color:var(--muted);}
@@ -109,6 +118,10 @@ textarea{resize:none;height:70px;}
 .empty p{font-size:14px;}
 .dragging{opacity:.35;}
 .drag-over{border:2px dashed var(--accent)!important;}
+
+.connecting{text-align:center;padding:60px 20px;color:var(--muted);}
+.connecting .icon{font-size:36px;margin-bottom:12px;animation:spin 1s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
 </style>
 </head>
 <body>
@@ -143,20 +156,26 @@ textarea{resize:none;height:70px;}
   </header>
   <div class="tabs" id="tabs-container"></div>
 
+  <!-- CLIENTE: PEDIR TURNO -->
   <div class="view" id="view-pedir">
-    <div class="estado-card" id="estado-box" style="display:none">
-      <div class="estado-label">📋 Estado de tu solicitud</div>
-      <div id="estado-text"></div>
-    </div>
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;">
-      <div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;">En escena ahora</div>
-      <div id="en-escena" style="font-weight:700;font-size:15px;color:var(--accent);">Esperando inicio de noche...</div>
+    <div class="escena-box">
+      <div class="escena-label">🎤 En escena ahora</div>
+      <div class="escena-text" id="en-escena-cliente">Esperando inicio de noche...</div>
     </div>
     <div class="form-card">
-      <div class="form-title">🎵 Solicitar turno</div>
+      <div class="form-title">🎵 Pedir mi turno</div>
       <div class="field"><label>Tu nombre</label><input type="text" id="c-nombre" placeholder="Ej: María López" maxlength="40"></div>
-      <div class="field"><label>Canción</label><input type="text" id="c-cancion" placeholder="Ej: Bésame Mucho" maxlength="60"></div>
-      <div class="field"><label>Artista</label><input type="text" id="c-artista" placeholder="Ej: Los Panchos" maxlength="40"></div>
+      <div class="field"><label>Mesa / Grupo</label><input type="text" id="c-mesa" placeholder="Ej: Mesa 4" maxlength="30"></div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">🎵 Canción 1 (obligatoria)</div>
+        <div class="field" style="margin-bottom:10px"><label>Canción</label><input type="text" id="c-cancion1" placeholder="Nombre de la canción" maxlength="60"></div>
+        <div class="field" style="margin-bottom:0"><label>Artista</label><input type="text" id="c-artista1" placeholder="Nombre del artista" maxlength="40"></div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">🎵 Canción 2 (opcional)</div>
+        <div class="field" style="margin-bottom:10px"><label>Canción</label><input type="text" id="c-cancion2" placeholder="Nombre de la canción" maxlength="60"></div>
+        <div class="field" style="margin-bottom:0"><label>Artista</label><input type="text" id="c-artista2" placeholder="Nombre del artista" maxlength="40"></div>
+      </div>
       <div class="field">
         <label>Género musical</label>
         <select id="c-genero">
@@ -167,23 +186,24 @@ textarea{resize:none;height:70px;}
           <option>Vallenato</option><option>Bolero</option><option>Otro</option>
         </select>
       </div>
-      <div class="field"><label>Mesa / Grupo</label><input type="text" id="c-mesa" placeholder="Ej: Mesa 4" maxlength="30"></div>
       <div class="field"><label>Nota especial (opcional)</label><textarea id="c-nota" placeholder="Ej: Es mi cumpleaños 🎂, dedicatoria..."></textarea></div>
       <button class="btn-primary" onclick="enviarSolicitud()">Enviar solicitud 🎤</button>
-      <div class="success-msg" id="success-msg">✅ ¡Solicitud enviada! El animador la revisará pronto.</div>
+      <div class="success-msg" id="success-msg">✅ ¡Solicitud enviada! Ya estás en la cola.</div>
+      <div class="error-msg" id="error-msg">❌ Error al enviar. Intenta de nuevo.</div>
     </div>
   </div>
 
+  <!-- ANIMADOR: COLA -->
   <div class="view" id="view-cola">
     <div class="stats-row">
-      <div class="stat-box"><div class="stat-num" id="s-pend" style="color:var(--gold)">0</div><div class="stat-label">Nuevas</div></div>
       <div class="stat-box"><div class="stat-num" id="s-cola" style="color:var(--green)">0</div><div class="stat-label">En cola</div></div>
+      <div class="stat-box"><div class="stat-num" id="s-escena" style="color:var(--accent)">0</div><div class="stat-label">En escena</div></div>
       <div class="stat-box"><div class="stat-num" id="s-total" style="color:var(--muted)">0</div><div class="stat-label">Esta noche</div></div>
     </div>
-    <div id="lista-pendientes"></div>
     <div id="lista-cola"></div>
   </div>
 
+  <!-- ANIMADOR: ESTADÍSTICAS -->
   <div class="view" id="view-stats">
     <div class="section-title">🎵 Canciones más pedidas</div>
     <div id="chart-canciones"></div>
@@ -197,11 +217,13 @@ textarea{resize:none;height:70px;}
     </div>
   </div>
 
+  <!-- ANIMADOR: HISTORIAL -->
   <div class="view" id="view-historial">
     <div id="lista-historial"></div>
-    <button class="btn-limpiar" onclick="limpiarHistorial()">🗑 Limpiar historial</button>
+    <button class="btn-limpiar" onclick="limpiarHistorial()">🗑 Limpiar historial de esta noche</button>
   </div>
 
+  <!-- ANIMADOR: QR / COMPARTIR -->
   <div class="view" id="view-qr">
     <div class="qr-section">
       <div class="qr-title">📲 Comparte la app</div>
@@ -221,133 +243,417 @@ textarea{resize:none;height:70px;}
   </div>
 </div>
 
-<script>
-let rol=null,solicitudes=JSON.parse(localStorage.getItem('rac_sol')||'[]'),historial=JSON.parse(localStorage.getItem('rac_hist')||'[]'),contador=parseInt(localStorage.getItem('rac_cont')||'0'),PIN=localStorage.getItem('rac_pin')||'1234',miId=null,qrHecho=false,dragSrcId=null;
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, set, onValue, remove, update, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-function guardar(){localStorage.setItem('rac_sol',JSON.stringify(solicitudes));localStorage.setItem('rac_hist',JSON.stringify(historial));localStorage.setItem('rac_cont',contador);}
+const firebaseConfig = {
+  apiKey: "AIzaSyAikHXCIL2e1J9OPK2x9esiMsxMR5LDvIA",
+  authDomain: "pide-tu-karaoke.firebaseapp.com",
+  databaseURL: "https://pide-tu-karaoke-default-rtdb.firebaseio.com",
+  projectId: "pide-tu-karaoke",
+  storageBucket: "pide-tu-karaoke.firebasestorage.app",
+  messagingSenderId: "667583332180",
+  appId: "1:667583332180:web:dc74f1ce88340dd2f4d2c1"
+};
 
-function abrirPin(){document.getElementById('pin-modal').classList.add('open');setTimeout(()=>document.getElementById('pin-input').focus(),150);}
-function cerrarPin(){document.getElementById('pin-modal').classList.remove('open');document.getElementById('pin-input').value='';document.getElementById('pin-error').style.display='none';}
-function verificarPin(){if(document.getElementById('pin-input').value===PIN){cerrarPin();iniciarApp('animador');}else{document.getElementById('pin-error').style.display='block';document.getElementById('pin-input').value='';document.getElementById('pin-input').focus();}}
-function entrarCliente(){iniciarApp('cliente');}
-function cerrarSesion(){rol=null;miId=null;document.getElementById('screen-login').style.display='flex';document.getElementById('screen-app').style.display='none';}
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-function iniciarApp(r){
-  rol=r;
-  document.getElementById('screen-login').style.display='none';
-  document.getElementById('screen-app').style.display='block';
-  const chip=document.getElementById('perfil-chip');
-  if(r==='animador'){chip.textContent='🎛 Animador';chip.className='perfil-chip chip-animador';buildTabs(['cola','stats','historial','qr'],['🎛 Cola','📊 Stats','🎶 Historial','📲 Compartir']);switchTab('cola');}
-  else{chip.textContent='🎵 Cliente';chip.className='perfil-chip chip-cliente';buildTabs(['pedir'],['🎵 Pedir turno']);switchTab('pedir');}
+// ── REFS ──────────────────────────────────────────────────
+const colaRef      = ref(db, 'cola');
+const historialRef = ref(db, 'historial');
+const configRef    = ref(db, 'config');
+
+// ── ESTADO LOCAL ──────────────────────────────────────────
+let rol = null;
+let qrHecho = false;
+let dragSrcId = null;
+let colaData = {};
+let histData = {};
+let PIN = '1234';
+let contadorNoche = 0;
+
+// Cargar PIN y contador desde Firebase
+onValue(configRef, snap => {
+  const d = snap.val() || {};
+  PIN = d.pin || '1234';
+  contadorNoche = d.contador || 0;
+});
+
+// ── LOGIN ──────────────────────────────────────────────────
+window.abrirPin = () => {
+  document.getElementById('pin-modal').classList.add('open');
+  setTimeout(() => document.getElementById('pin-input').focus(), 150);
+};
+window.cerrarPin = () => {
+  document.getElementById('pin-modal').classList.remove('open');
+  document.getElementById('pin-input').value = '';
+  document.getElementById('pin-error').style.display = 'none';
+};
+window.verificarPin = () => {
+  if (document.getElementById('pin-input').value === PIN) {
+    cerrarPin(); iniciarApp('animador');
+  } else {
+    document.getElementById('pin-error').style.display = 'block';
+    document.getElementById('pin-input').value = '';
+    document.getElementById('pin-input').focus();
+  }
+};
+window.entrarCliente = () => iniciarApp('cliente');
+window.cerrarSesion = () => {
+  rol = null;
+  document.getElementById('screen-login').style.display = 'flex';
+  document.getElementById('screen-app').style.display = 'none';
+};
+
+function iniciarApp(r) {
+  rol = r;
+  document.getElementById('screen-login').style.display = 'none';
+  document.getElementById('screen-app').style.display = 'block';
+  const chip = document.getElementById('perfil-chip');
+  if (r === 'animador') {
+    chip.textContent = '🎛 Animador'; chip.className = 'perfil-chip chip-animador';
+    buildTabs(['cola','stats','historial','qr'], ['🎛 Cola','📊 Stats','🎶 Historial','📲 Compartir']);
+    escucharCola();
+    escucharHistorial();
+    switchTab('cola');
+  } else {
+    chip.textContent = '🎵 Cliente'; chip.className = 'perfil-chip chip-cliente';
+    buildTabs(['pedir'], ['🎵 Pedir turno']);
+    escucharEscenaCliente();
+    switchTab('pedir');
+  }
 }
 
-function buildTabs(ids,labels){document.getElementById('tabs-container').innerHTML=ids.map((id,i)=>`<div class="tab" id="tab-${id}" onclick="switchTab('${id}')">${labels[i]}</div>`).join('');}
-function switchTab(id){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  const t=document.getElementById('tab-'+id),v=document.getElementById('view-'+id);
-  if(t)t.classList.add('active');if(v)v.classList.add('active');
-  if(id==='cola')renderCola();if(id==='stats')renderStats();if(id==='historial')renderHistorial();if(id==='qr')renderQR();if(id==='pedir')renderCliente();
+// ── TABS ───────────────────────────────────────────────────
+function buildTabs(ids, labels) {
+  document.getElementById('tabs-container').innerHTML =
+    ids.map((id,i) => `<div class="tab" id="tab-${id}" onclick="switchTab('${id}')">${labels[i]}</div>`).join('');
 }
+window.switchTab = (id) => {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const t = document.getElementById('tab-'+id);
+  const v = document.getElementById('view-'+id);
+  if(t) t.classList.add('active');
+  if(v) v.classList.add('active');
+  if(id==='stats') renderStats();
+  if(id==='qr') renderQR();
+};
 
-function enviarSolicitud(){
-  const nombre=document.getElementById('c-nombre').value.trim(),cancion=document.getElementById('c-cancion').value.trim(),artista=document.getElementById('c-artista').value.trim(),genero=document.getElementById('c-genero').value,mesa=document.getElementById('c-mesa').value.trim(),nota=document.getElementById('c-nota').value.trim();
-  if(!nombre||!cancion||!artista||!mesa){alert('Completa nombre, canción, artista y mesa.');return;}
-  const t={id:Date.now(),nombre,cancion,artista,genero,mesa,nota,estado:'pendiente',hora:new Date().toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'})};
-  solicitudes.push(t);miId=t.id;guardar();
-  ['c-nombre','c-cancion','c-artista','c-mesa','c-nota'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('c-genero').value='';
-  const sm=document.getElementById('success-msg');sm.style.display='block';setTimeout(()=>sm.style.display='none',3500);
-  renderCliente();
-}
-
-function renderCliente(){
-  solicitudes=JSON.parse(localStorage.getItem('rac_sol')||'[]');
-  const c=solicitudes.find(s=>s.estado==='cantando');
-  document.getElementById('en-escena').textContent=c?`🎤 ${c.nombre} — "${c.cancion}"` :'Nadie en escena aún';
-  if(!miId)return;
-  const t=solicitudes.find(s=>s.id===miId),box=document.getElementById('estado-box'),txt=document.getElementById('estado-text');
-  box.style.display='block';
-  if(!t){txt.innerHTML=`<span style="color:var(--accent)">❌ Tu solicitud fue rechazada. Puedes enviar una nueva.</span>`;miId=null;}
-  else if(t.estado==='pendiente'){txt.innerHTML=`<span style="color:var(--gold)">⏳ Pendiente de aprobación...</span><br><span style="font-size:12px;color:var(--muted)">"${t.cancion}" — ${t.artista}</span>`;}
-  else if(t.estado==='aprobado'){txt.innerHTML=`<span style="color:var(--green)">✅ ¡Aprobada! Estás en la cola.</span><br><span style="font-size:12px;color:var(--muted)">"${t.cancion}" — ${t.artista}</span>`;}
-  else if(t.estado==='cantando'){txt.innerHTML=`<span style="color:var(--accent)">🎤 ¡Es tu turno! Sube al escenario 🎉</span>`;}
-}
-
-const GENS=['','Balada romántica','Salsa','Merengue','Bachata','Reggaetón','Cumbia','Rock en español','Pop latino','Vallenato','Bolero','Otro'];
-function genOpts(sel){return GENS.map(o=>`<option${o===sel?' selected':''}>${o}</option>`).join('');}
-
-function renderCola(){
-  const pend=solicitudes.filter(s=>s.estado==='pendiente'),aprob=solicitudes.filter(s=>s.estado==='aprobado'),cant=solicitudes.filter(s=>s.estado==='cantando');
-  document.getElementById('s-pend').textContent=pend.length;document.getElementById('s-cola').textContent=aprob.length;document.getElementById('s-total').textContent=contador;
-  const tb=document.getElementById('tab-cola');if(tb)tb.innerHTML=`🎛 Cola${pend.length>0?` <span class="tab-badge">${pend.length}</span>`:''}`;
-  const c=cant[0];document.getElementById('en-escena').textContent=c?`🎤 ${c.nombre} — "${c.cancion}"` :'Nadie en escena aún';
-
-  let hp=pend.length>0?`<div class="section-title">⏳ Nuevas solicitudes (${pend.length})</div>`+pend.map(cardPend).join(''):'';
-  let hc='';
-  if(cant.length>0||aprob.length>0){hc=`<div class="section-title">🎤 En escena y cola</div>`;cant.forEach(t=>{hc+=cardCant(t);});aprob.forEach((t,i)=>{hc+=cardAprob(t,i+1);});}
-  if(!hp&&!hc)hp=`<div class="empty"><div class="icon">🎵</div><p>Sin solicitudes aún.<br>¡La noche está por comenzar!</p></div>`;
-  document.getElementById('lista-pendientes').innerHTML=hp;document.getElementById('lista-cola').innerHTML=hc;initDrag();
-}
-
-function cardPend(t){return `<div class="turno-card pendiente" data-id="${t.id}"><div class="turno-header"><div class="turno-info"><div class="turno-nombre">${t.nombre} <span style="color:var(--muted);font-weight:400">· ${t.mesa}</span></div><div class="turno-cancion">🎵 "${t.cancion}" — ${t.artista}</div><div class="turno-meta">📨 ${t.hora}</div>${t.nota?`<div class="nota-chip">⭐ ${t.nota}</div>`:''}${t.genero?`<div class="genero-chip">🎸 ${t.genero}</div>`:''}<select class="genre-edit" onchange="editGenero(${t.id},this.value)">${genOpts(t.genero)}</select></div><span class="badge pendiente">Nuevo</span></div><div class="turno-actions"><button class="btn-sm btn-aprobar" onclick="aprobar(${t.id})">✅ Aprobar</button><button class="btn-sm btn-rechazar" onclick="rechazar(${t.id})">✗ Rechazar</button></div></div>`;}
-
-function cardAprob(t,pos){return `<div class="turno-card aprobado" draggable="true" data-id="${t.id}"><div class="turno-header"><div class="drag-handle">⠿</div><div class="turno-info"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:3px">TURNO #${pos}</div><div class="turno-nombre">${t.nombre} <span style="color:var(--muted);font-weight:400">· ${t.mesa}</span></div><div class="turno-cancion">🎵 "${t.cancion}" — ${t.artista}</div>${t.nota?`<div class="nota-chip">⭐ ${t.nota}</div>`:''}${t.genero?`<div class="genero-chip">🎸 ${t.genero}</div>`:''}<select class="genre-edit" onchange="editGenero(${t.id},this.value)">${genOpts(t.genero)}</select></div><span class="badge aprobado">En cola</span></div><div class="turno-actions"><button class="btn-sm btn-cantar" onclick="pasarEscena(${t.id})">🎤 Escena</button><button class="btn-sm btn-mover" onclick="mover(${t.id},-1)">▲</button><button class="btn-sm btn-mover" onclick="mover(${t.id},1)">▼</button><button class="btn-sm btn-rechazar" onclick="rechazar(${t.id})">✗</button></div></div>`;}
-
-function cardCant(t){return `<div class="turno-card cantando" data-id="${t.id}"><div class="turno-header"><div class="turno-info"><div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:3px">🎤 EN ESCENA</div><div class="turno-nombre">${t.nombre} <span style="color:var(--muted);font-weight:400">· ${t.mesa}</span></div><div class="turno-cancion">🎵 "${t.cancion}" — ${t.artista}</div>${t.nota?`<div class="nota-chip">⭐ ${t.nota}</div>`:''}${t.genero?`<div class="genero-chip">🎸 ${t.genero}</div>`:''}</div><span class="badge cantando">En vivo</span></div><div class="turno-actions"><button class="btn-sm btn-listo" onclick="finalizar(${t.id})">✓ Terminó</button></div></div>`;}
-
-function editGenero(id,val){const t=solicitudes.find(s=>s.id===id);if(t){t.genero=val;guardar();}}
-function aprobar(id){const t=solicitudes.find(s=>s.id===id);if(t){t.estado='aprobado';guardar();renderCola();}}
-function rechazar(id){solicitudes=solicitudes.filter(s=>s.id!==id);guardar();renderCola();}
-function pasarEscena(id){solicitudes.forEach(s=>{if(s.estado==='cantando')s.estado='aprobado';});const t=solicitudes.find(s=>s.id===id);if(t){t.estado='cantando';guardar();renderCola();}}
-function finalizar(id){const t=solicitudes.find(s=>s.id===id);if(t){historial.unshift({...t,horaFin:new Date().toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'})});solicitudes=solicitudes.filter(s=>s.id!==id);contador++;guardar();renderCola();}}
-function mover(id,dir){const aprob=solicitudes.filter(s=>s.estado==='aprobado'),idx=aprob.findIndex(s=>s.id===id),nIdx=idx+dir;if(nIdx<0||nIdx>=aprob.length)return;const ai=solicitudes.indexOf(aprob[idx]),bi=solicitudes.indexOf(aprob[nIdx]);[solicitudes[ai],solicitudes[bi]]=[solicitudes[bi],solicitudes[ai]];guardar();renderCola();}
-
-function initDrag(){
-  document.querySelectorAll('#lista-cola .turno-card[draggable="true"]').forEach(card=>{
-    card.addEventListener('dragstart',()=>{dragSrcId=parseInt(card.dataset.id);card.classList.add('dragging');});
-    card.addEventListener('dragend',()=>{card.classList.remove('dragging');document.querySelectorAll('.drag-over').forEach(c=>c.classList.remove('drag-over'));});
-    card.addEventListener('dragover',e=>{e.preventDefault();card.classList.add('drag-over');});
-    card.addEventListener('dragleave',()=>card.classList.remove('drag-over'));
-    card.addEventListener('drop',e=>{e.preventDefault();card.classList.remove('drag-over');const destId=parseInt(card.dataset.id);if(dragSrcId===destId)return;const si=solicitudes.findIndex(s=>s.id===dragSrcId),di=solicitudes.findIndex(s=>s.id===destId);const[moved]=solicitudes.splice(si,1);solicitudes.splice(di,0,moved);guardar();renderCola();});
+// ── ESCUCHAR COLA (TIEMPO REAL) ────────────────────────────
+function escucharCola() {
+  onValue(colaRef, snap => {
+    colaData = snap.val() || {};
+    renderCola();
   });
 }
 
-function renderStats(){
-  const todos=[...historial,...solicitudes.filter(s=>s.estado==='cantando')];
-  const genMap={},songMap={},artSet=new Set();
-  todos.forEach(t=>{if(t.genero)genMap[t.genero]=(genMap[t.genero]||0)+1;const key=`${t.cancion} — ${t.artista}`;songMap[key]=(songMap[key]||0)+1;if(t.artista)artSet.add(t.artista.toLowerCase());});
-  document.getElementById('st-total').textContent=historial.length;document.getElementById('st-gen').textContent=Object.keys(genMap).length;document.getElementById('st-art').textContent=artSet.size;
+function escucharHistorial() {
+  onValue(historialRef, snap => {
+    histData = snap.val() || {};
+  });
+}
+
+function escucharEscenaCliente() {
+  onValue(colaRef, snap => {
+    const data = snap.val() || {};
+    const cantando = Object.values(data).find(t => t.estado === 'cantando');
+    const el = document.getElementById('en-escena-cliente');
+    if(el) el.textContent = cantando
+      ? `🎤 ${cantando.nombre} — "${cantando.cancion1}"`
+      : 'Nadie en escena aún';
+  });
+}
+
+// ── CLIENTE: ENVIAR SOLICITUD ──────────────────────────────
+window.enviarSolicitud = async () => {
+  const nombre   = document.getElementById('c-nombre').value.trim();
+  const mesa     = document.getElementById('c-mesa').value.trim();
+  const cancion1 = document.getElementById('c-cancion1').value.trim();
+  const artista1 = document.getElementById('c-artista1').value.trim();
+  const cancion2 = document.getElementById('c-cancion2').value.trim();
+  const artista2 = document.getElementById('c-artista2').value.trim();
+  const genero   = document.getElementById('c-genero').value;
+  const nota     = document.getElementById('c-nota').value.trim();
+
+  if(!nombre || !mesa || !cancion1 || !artista1) {
+    alert('Completa tu nombre, mesa, y al menos la primera canción.');
+    return;
+  }
+
+  const t = {
+    nombre, mesa, cancion1, artista1,
+    cancion2: cancion2 || '', artista2: artista2 || '',
+    genero, nota, estado: 'en-cola',
+    hora: new Date().toLocaleTimeString('es-EC', {hour:'2-digit', minute:'2-digit'}),
+    orden: Date.now()
+  };
+
+  try {
+    await push(colaRef, t);
+    ['c-nombre','c-mesa','c-cancion1','c-artista1','c-cancion2','c-artista2','c-nota'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('c-genero').value = '';
+    const sm = document.getElementById('success-msg');
+    sm.style.display = 'block';
+    setTimeout(() => sm.style.display = 'none', 4000);
+  } catch(e) {
+    document.getElementById('error-msg').style.display = 'block';
+    setTimeout(() => document.getElementById('error-msg').style.display = 'none', 3000);
+  }
+};
+
+// ── ANIMADOR: RENDERIZAR COLA ──────────────────────────────
+function renderCola() {
+  const items = Object.entries(colaData).sort((a,b) => (a[1].orden||0)-(b[1].orden||0));
+  const cola    = items.filter(([,t]) => t.estado === 'en-cola');
+  const cantando = items.filter(([,t]) => t.estado === 'cantando');
+
+  document.getElementById('s-cola').textContent    = cola.length;
+  document.getElementById('s-escena').textContent  = cantando.length;
+  document.getElementById('s-total').textContent   = contadorNoche;
+
+  const tb = document.getElementById('tab-cola');
+  if(tb) tb.innerHTML = `🎛 Cola${cola.length>0?` <span class="tab-badge">${cola.length}</span>`:''}`;
+
+  // En escena para cliente
+  const c = cantando[0]?.[1];
+  const escCliente = document.getElementById('en-escena-cliente');
+  if(escCliente) escCliente.textContent = c ? `🎤 ${c.nombre} — "${c.cancion1}"` : 'Nadie en escena aún';
+
+  let html = '';
+  if(cantando.length > 0) {
+    html += `<div class="section-title">🎤 En escena ahora</div>`;
+    cantando.forEach(([key,t]) => { html += cardCantando(key, t); });
+  }
+  if(cola.length > 0) {
+    html += `<div class="section-title">📋 Cola (${cola.length})</div>`;
+    cola.forEach(([key,t], i) => { html += cardCola(key, t, i+1); });
+  }
+  if(!html) html = `<div class="empty"><div class="icon">🎵</div><p>Sin pedidos aún.<br>¡La noche está por comenzar!</p></div>`;
+
+  document.getElementById('lista-cola').innerHTML = html;
+  initDrag();
+}
+
+function canciones(t) {
+  let s = `🎵 "${t.cancion1}" — ${t.artista1}`;
+  if(t.cancion2) s += `<br>🎵 "${t.cancion2}" — ${t.artista2}`;
+  return s;
+}
+
+function cardCola(key, t, pos) {
+  return `<div class="turno-card en-cola" draggable="true" data-key="${key}">
+    <div class="turno-header">
+      <div class="drag-handle">⠿</div>
+      <div class="turno-info">
+        <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:3px">TURNO #${pos}</div>
+        <div class="turno-nombre">${t.nombre} <span style="color:var(--muted);font-weight:400">· ${t.mesa}</span></div>
+        <div class="turno-canciones">${canciones(t)}</div>
+        <div class="turno-meta">📨 ${t.hora}</div>
+        ${t.nota?`<div class="nota-chip">⭐ ${t.nota}</div>`:''}
+        ${t.genero?`<div class="genero-chip">🎸 ${t.genero}</div>`:''}
+      </div>
+      <span class="badge cola">En cola</span>
+    </div>
+    <div class="turno-actions">
+      <button class="btn-sm btn-cantar" onclick="pasarEscena('${key}')">🎤 Escena</button>
+      <button class="btn-sm btn-mover" onclick="moverArriba('${key}')">▲</button>
+      <button class="btn-sm btn-mover" onclick="moverAbajo('${key}')">▼</button>
+      <button class="btn-sm btn-quitar" onclick="quitarTurno('${key}')">✗</button>
+    </div>
+  </div>`;
+}
+
+function cardCantando(key, t) {
+  return `<div class="turno-card cantando" data-key="${key}">
+    <div class="turno-header">
+      <div class="turno-info">
+        <div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:3px">🎤 EN ESCENA</div>
+        <div class="turno-nombre">${t.nombre} <span style="color:var(--muted);font-weight:400">· ${t.mesa}</span></div>
+        <div class="turno-canciones">${canciones(t)}</div>
+        ${t.nota?`<div class="nota-chip">⭐ ${t.nota}</div>`:''}
+        ${t.genero?`<div class="genero-chip">🎸 ${t.genero}</div>`:''}
+      </div>
+      <span class="badge cantando">En vivo</span>
+    </div>
+    <div class="turno-actions">
+      <button class="btn-sm btn-listo" onclick="finalizar('${key}')">✓ Terminó</button>
+      <button class="btn-sm btn-quitar" onclick="quitarTurno('${key}')">✗ Quitar</button>
+    </div>
+  </div>`;
+}
+
+window.pasarEscena = async (key) => {
+  // Bajar el que está cantando
+  const items = Object.entries(colaData);
+  for(const [k,t] of items) {
+    if(t.estado === 'cantando') await update(ref(db,`cola/${k}`), {estado:'en-cola'});
+  }
+  await update(ref(db,`cola/${key}`), {estado:'cantando'});
+};
+
+window.finalizar = async (key) => {
+  const t = colaData[key];
+  if(!t) return;
+  const horaFin = new Date().toLocaleTimeString('es-EC', {hour:'2-digit', minute:'2-digit'});
+  await push(historialRef, {...t, horaFin});
+  await remove(ref(db, `cola/${key}`));
+  contadorNoche++;
+  await update(configRef, {contador: contadorNoche});
+};
+
+window.quitarTurno = async (key) => {
+  if(confirm('¿Quitar este turno de la cola?')) {
+    await remove(ref(db, `cola/${key}`));
+  }
+};
+
+window.moverArriba = async (key) => {
+  const items = Object.entries(colaData)
+    .filter(([,t]) => t.estado==='en-cola')
+    .sort((a,b) => (a[1].orden||0)-(b[1].orden||0));
+  const idx = items.findIndex(([k]) => k===key);
+  if(idx <= 0) return;
+  const [keyA, tA] = items[idx];
+  const [keyB, tB] = items[idx-1];
+  await update(ref(db,`cola/${keyA}`), {orden: tB.orden});
+  await update(ref(db,`cola/${keyB}`), {orden: tA.orden});
+};
+
+window.moverAbajo = async (key) => {
+  const items = Object.entries(colaData)
+    .filter(([,t]) => t.estado==='en-cola')
+    .sort((a,b) => (a[1].orden||0)-(b[1].orden||0));
+  const idx = items.findIndex(([k]) => k===key);
+  if(idx >= items.length-1) return;
+  const [keyA, tA] = items[idx];
+  const [keyB, tB] = items[idx+1];
+  await update(ref(db,`cola/${keyA}`), {orden: tB.orden});
+  await update(ref(db,`cola/${keyB}`), {orden: tA.orden});
+};
+
+// ── DRAG & DROP ────────────────────────────────────────────
+function initDrag() {
+  document.querySelectorAll('#lista-cola .turno-card[draggable="true"]').forEach(card => {
+    card.addEventListener('dragstart', () => { dragSrcId = card.dataset.key; card.classList.add('dragging'); });
+    card.addEventListener('dragend',   () => { card.classList.remove('dragging'); document.querySelectorAll('.drag-over').forEach(c=>c.classList.remove('drag-over')); });
+    card.addEventListener('dragover',  e  => { e.preventDefault(); card.classList.add('drag-over'); });
+    card.addEventListener('dragleave', () => card.classList.remove('drag-over'));
+    card.addEventListener('drop', async e => {
+      e.preventDefault(); card.classList.remove('drag-over');
+      const destKey = card.dataset.key;
+      if(!dragSrcId || dragSrcId === destKey) return;
+      const src = colaData[dragSrcId];
+      const dst = colaData[destKey];
+      if(!src||!dst) return;
+      await update(ref(db,`cola/${dragSrcId}`), {orden: dst.orden});
+      await update(ref(db,`cola/${destKey}`),   {orden: src.orden});
+    });
+  });
+}
+
+// ── ESTADÍSTICAS ───────────────────────────────────────────
+function renderStats() {
+  const todos = [
+    ...Object.values(histData),
+    ...Object.values(colaData).filter(t => t.estado==='cantando')
+  ];
+  const genMap={}, songMap={}, artSet=new Set();
+  todos.forEach(t => {
+    if(t.genero) genMap[t.genero]=(genMap[t.genero]||0)+1;
+    [[t.cancion1,t.artista1],[t.cancion2,t.artista2]].forEach(([c,a])=>{
+      if(c&&a){ const k=`${c} — ${a}`; songMap[k]=(songMap[k]||0)+1; artSet.add(a.toLowerCase()); }
+    });
+  });
+  document.getElementById('st-total').textContent = Object.values(histData).length;
+  document.getElementById('st-gen').textContent   = Object.keys(genMap).length;
+  document.getElementById('st-art').textContent   = artSet.size;
   const colors=['var(--accent)','var(--gold)','var(--green)','var(--blue)','var(--purple)','var(--accent2)'];
-  const songs=Object.entries(songMap).sort((a,b)=>b[1]-a[1]).slice(0,8),maxS=songs[0]?.[1]||1;
-  document.getElementById('chart-canciones').innerHTML=songs.length===0?'<div style="color:var(--muted);font-size:13px;padding:8px 0">Aún no hay canciones registradas.</div>':songs.map(([k,v],i)=>`<div class="chart-bar-row"><div class="chart-bar-label" title="${k}">${k}</div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${(v/maxS*100).toFixed(0)}%;background:${colors[i%colors.length]}"></div></div><div class="chart-bar-count">${v}</div></div>`).join('');
-  const gens=Object.entries(genMap).sort((a,b)=>b[1]-a[1]),maxG=gens[0]?.[1]||1;
-  document.getElementById('chart-generos').innerHTML=gens.length===0?'<div style="color:var(--muted);font-size:13px;padding:8px 0">Aún no hay géneros registrados.</div>':gens.map(([k,v],i)=>`<div class="chart-bar-row"><div class="chart-bar-label">${k}</div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${(v/maxG*100).toFixed(0)}%;background:${colors[i%colors.length]}"></div></div><div class="chart-bar-count">${v}</div></div>`).join('');
+  const songs=Object.entries(songMap).sort((a,b)=>b[1]-a[1]).slice(0,8), maxS=songs[0]?.[1]||1;
+  document.getElementById('chart-canciones').innerHTML = songs.length===0
+    ? '<div style="color:var(--muted);font-size:13px;padding:8px 0">Aún no hay canciones.</div>'
+    : songs.map(([k,v],i)=>`<div class="chart-bar-row"><div class="chart-bar-label" title="${k}">${k}</div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${(v/maxS*100).toFixed(0)}%;background:${colors[i%colors.length]}"></div></div><div class="chart-bar-count">${v}</div></div>`).join('');
+  const gens=Object.entries(genMap).sort((a,b)=>b[1]-a[1]), maxG=gens[0]?.[1]||1;
+  document.getElementById('chart-generos').innerHTML = gens.length===0
+    ? '<div style="color:var(--muted);font-size:13px;padding:8px 0">Aún no hay géneros.</div>'
+    : gens.map(([k,v],i)=>`<div class="chart-bar-row"><div class="chart-bar-label">${k}</div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${(v/maxG*100).toFixed(0)}%;background:${colors[i%colors.length]}"></div></div><div class="chart-bar-count">${v}</div></div>`).join('');
 }
 
-function renderHistorial(){
-  const el=document.getElementById('lista-historial');
-  if(historial.length===0){el.innerHTML=`<div class="empty"><div class="icon">🎶</div><p>Sin historial esta noche.</p></div>`;return;}
-  el.innerHTML=`<div class="section-title">🎶 Esta noche (${historial.length})</div>`+historial.map(t=>`<div class="hist-item"><div class="hist-left"><div class="name">${t.nombre} · ${t.mesa}</div><div class="song">🎵 "${t.cancion}" — ${t.artista}</div>${t.genero?`<div style="font-size:11px;color:var(--purple);margin-top:2px">🎸 ${t.genero}</div>`:''}${t.nota?`<div style="font-size:11px;color:var(--gold);margin-top:2px">⭐ ${t.nota}</div>`:''}</div><div class="hist-right">${t.horaFin||t.hora}</div></div>`).join('');
-}
-function limpiarHistorial(){if(confirm('¿Limpiar el historial de esta noche?')){historial=[];contador=0;guardar();renderHistorial();}}
-
-function renderQR(){
-  const url=window.location.href.split('?')[0];
-  document.getElementById('link-display').textContent=url;
-  if(!qrHecho){new QRCode(document.getElementById('qrcode'),{text:url,width:200,height:200,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});qrHecho=true;}
-}
-function copiarLink(){const url=window.location.href.split('?')[0];navigator.clipboard.writeText(url).then(()=>{const ok=document.getElementById('copy-ok');ok.style.display='block';setTimeout(()=>ok.style.display='none',2500);});}
-
-function cambiarPin(){
-  const actual=document.getElementById('pin-actual').value,nuevo=document.getElementById('pin-nuevo').value,msg=document.getElementById('pin-msg');
-  if(actual!==PIN){msg.style.display='block';msg.style.color='var(--accent)';msg.textContent='PIN actual incorrecto.';return;}
-  if(!/^\d{4}$/.test(nuevo)){msg.style.display='block';msg.style.color='var(--accent)';msg.textContent='El PIN nuevo debe ser de 4 dígitos.';return;}
-  PIN=nuevo;localStorage.setItem('rac_pin',PIN);document.getElementById('pin-actual').value='';document.getElementById('pin-nuevo').value='';
-  msg.style.display='block';msg.style.color='var(--green)';msg.textContent='✅ PIN actualizado.';setTimeout(()=>msg.style.display='none',3000);
+// ── HISTORIAL ──────────────────────────────────────────────
+function renderHistorialLocal() {
+  const el = document.getElementById('lista-historial');
+  const items = Object.values(histData).reverse();
+  if(items.length===0){ el.innerHTML=`<div class="empty"><div class="icon">🎶</div><p>Sin historial esta noche.</p></div>`; return; }
+  el.innerHTML=`<div class="section-title">🎶 Esta noche (${items.length})</div>`+
+    items.map(t=>`<div class="hist-item">
+      <div class="hist-left">
+        <div class="name">${t.nombre} · ${t.mesa}</div>
+        <div class="song">🎵 "${t.cancion1}" — ${t.artista1}</div>
+        ${t.cancion2?`<div class="song">🎵 "${t.cancion2}" — ${t.artista2}</div>`:''}
+        ${t.genero?`<div style="font-size:11px;color:var(--purple);margin-top:2px">🎸 ${t.genero}</div>`:''}
+        ${t.nota?`<div style="font-size:11px;color:var(--gold);margin-top:2px">⭐ ${t.nota}</div>`:''}
+      </div>
+      <div class="hist-right">${t.horaFin||t.hora}</div>
+    </div>`).join('');
 }
 
-setInterval(()=>{if(rol==='cliente')renderCliente();},3000);
+onValue(historialRef, snap => {
+  histData = snap.val() || {};
+  if(document.getElementById('view-historial').classList.contains('active')) renderHistorialLocal();
+});
+
+window.switchTab = (id) => {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const t=document.getElementById('tab-'+id), v=document.getElementById('view-'+id);
+  if(t)t.classList.add('active'); if(v)v.classList.add('active');
+  if(id==='stats') renderStats();
+  if(id==='historial') renderHistorialLocal();
+  if(id==='qr') renderQR();
+};
+
+window.limpiarHistorial = async () => {
+  if(confirm('¿Limpiar historial de esta noche?')){
+    await set(historialRef, null);
+    await update(configRef, {contador:0});
+    contadorNoche=0;
+    renderHistorialLocal();
+  }
+};
+
+// ── QR ─────────────────────────────────────────────────────
+function renderQR() {
+  const url = window.location.href.split('?')[0];
+  document.getElementById('link-display').textContent = url;
+  if(!qrHecho) {
+    new QRCode(document.getElementById('qrcode'), {text:url, width:200, height:200, colorDark:'#000', colorLight:'#fff', correctLevel:QRCode.CorrectLevel.H});
+    qrHecho = true;
+  }
+}
+window.copiarLink = () => {
+  const url = window.location.href.split('?')[0];
+  navigator.clipboard.writeText(url).then(()=>{
+    const ok=document.getElementById('copy-ok'); ok.style.display='block';
+    setTimeout(()=>ok.style.display='none',2500);
+  });
+};
+
+// ── CAMBIAR PIN ────────────────────────────────────────────
+window.cambiarPin = async () => {
+  const actual = document.getElementById('pin-actual').value;
+  const nuevo  = document.getElementById('pin-nuevo').value;
+  const msg    = document.getElementById('pin-msg');
+  if(actual!==PIN){ msg.style.display='block'; msg.style.color='var(--accent)'; msg.textContent='PIN actual incorrecto.'; return; }
+  if(!/^\d{4}$/.test(nuevo)){ msg.style.display='block'; msg.style.color='var(--accent)'; msg.textContent='El PIN debe ser de 4 dígitos.'; return; }
+  await update(configRef, {pin: nuevo});
+  PIN = nuevo;
+  document.getElementById('pin-actual').value=''; document.getElementById('pin-nuevo').value='';
+  msg.style.display='block'; msg.style.color='var(--green)'; msg.textContent='✅ PIN actualizado correctamente.';
+  setTimeout(()=>msg.style.display='none',3000);
+};
 </script>
 </body>
 </html>
