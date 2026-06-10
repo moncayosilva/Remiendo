@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Remiendo al Corazón 🎤</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap');
+:root{--bg:#0d0d0d;--surface:#1a1a1a;--surface2:#242424;--border:#2e2e2e;--accent:#e63946;--accent2:#ff6b6b;--gold:#f4a261;--green:#2dc653;--blue:#4cc9f0;--purple:#9b5de5;--text:#f0f0f0;--muted:#888;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:480px;margin:0 auto;}
+#screen-login{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:30px;}
+.login-logo{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--accent);text-align:center;line-height:1.1;}
+.login-sub{color:var(--muted);font-size:13px;margin:8px 0 44px;text-align:center;}
+.login-btn{width:100%;padding:18px;border-radius:14px;border:none;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:14px;}
+.btn-animador{background:var(--accent);color:#fff;}
+.btn-cliente{background:var(--surface);color:var(--text);border:1px solid var(--border)!important;}
+.pin-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:999;align-items:center;justify-content:center;}
+.pin-modal.open{display:flex;}
+.pin-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 24px;width:90%;max-width:320px;}
+.pin-title{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--accent);margin-bottom:4px;}
+.pin-sub{font-size:13px;color:var(--muted);margin-bottom:18px;}
+.pin-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:24px;font-family:'Inter',sans-serif;padding:14px;text-align:center;letter-spacing:10px;outline:none;}
+.pin-input:focus{border-color:var(--accent);}
+.pin-error{color:var(--accent);font-size:13px;margin-top:8px;display:none;}
+.pin-actions{display:flex;gap:10px;margin-top:14px;}
+.pin-btn{flex:1;padding:13px;border-radius:10px;border:none;font-size:14px;font-weight:700;cursor:pointer;}
+.pin-cancel{background:var(--surface2);color:var(--muted);}
+.pin-enter{background:var(--accent);color:#fff;}
+#screen-app{display:none;}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--accent);}
+.logo span{color:var(--text);}
+.perfil-chip{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.5px;}
+.chip-animador{background:#2e0a0a;color:var(--accent);}
+.chip-cliente{background:#0a1a2e;color:var(--blue);}
+.logout-btn{font-size:12px;color:var(--muted);cursor:pointer;padding:4px 8px;border:1px solid var(--border);border-radius:8px;}
+.tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;}
+.tab{flex:1;min-width:72px;padding:12px 6px;text-align:center;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab-badge{display:inline-block;background:var(--accent);color:#fff;font-size:10px;font-weight:700;width:16px;height:16px;border-radius:50%;line-height:16px;text-align:center;margin-left:3px;vertical-align:middle;}
+.view{display:none;padding:16px;}
+.view.active{display:block;}
+.turno-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;}
+.turno-card.pendiente{border-left:4px solid var(--gold);}
+.turno-card.aprobado{border-left:4px solid var(--green);background:#111a11;}
+.turno-card.cantando{border-left:4px solid var(--accent);background:#1e0f0f;animation:pulse-red 2s infinite;}
+@keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(230,57,70,.4);}50%{box-shadow:0 0 0 8px rgba(230,57,70,0);}}
+.turno-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.drag-handle{font-size:22px;color:#444;cursor:grab;padding:0 10px 0 0;user-select:none;line-height:1;}
+.turno-info{flex:1;}
+.turno-nombre{font-weight:700;font-size:15px;}
+.turno-cancion{font-size:13px;color:var(--accent2);margin-top:3px;}
+.turno-meta{font-size:12px;color:var(--muted);margin-top:3px;}
+.badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;white-space:nowrap;}
+.badge.pendiente{background:#3a2f00;color:var(--gold);}
+.badge.aprobado{background:#0a2e10;color:var(--green);}
+.badge.cantando{background:#2e0a0a;color:var(--accent2);}
+.nota-chip{display:inline-flex;gap:4px;background:#2a2000;color:var(--gold);font-size:11px;padding:3px 8px;border-radius:20px;margin-top:6px;}
+.genero-chip{display:inline-flex;gap:4px;background:#1a0a2e;color:var(--purple);font-size:11px;padding:3px 8px;border-radius:20px;margin-top:6px;margin-left:4px;}
+.turno-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+.btn-sm{flex:1;min-width:58px;padding:8px 4px;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;}
+.btn-aprobar{background:var(--green);color:#000;}
+.btn-cantar{background:var(--accent);color:#fff;}
+.btn-listo{background:var(--surface2);color:var(--muted);}
+.btn-rechazar{background:#2e1010;color:var(--accent);border:1px solid var(--accent);}
+.btn-mover{background:#1a1a2e;color:var(--blue);border:1px solid var(--blue);}
+.genre-edit{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;padding:8px 10px;margin-top:8px;outline:none;font-family:'Inter',sans-serif;}
+.genre-edit:focus{border-color:var(--purple);}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.stat-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:32px;line-height:1;}
+.stat-label{font-size:11px;color:var(--muted);margin-top:2px;}
+.chart-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.chart-bar-label{font-size:12px;min-width:110px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.chart-bar-track{flex:1;background:var(--surface2);border-radius:20px;height:10px;overflow:hidden;}
+.chart-bar-fill{height:100%;border-radius:20px;transition:width .4s;}
+.chart-bar-count{font-size:12px;color:var(--muted);min-width:20px;text-align:right;}
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;}
+.form-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);margin-bottom:16px;}
+.field{margin-bottom:14px;}
+label{font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+input,textarea,select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:15px;font-family:'Inter',sans-serif;padding:12px 14px;outline:none;}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);}
+textarea{resize:none;height:70px;}
+.btn-primary{width:100%;padding:15px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;margin-top:4px;}
+.success-msg{background:#0a2e10;border:1px solid var(--green);border-radius:10px;padding:14px;text-align:center;color:var(--green);font-weight:600;margin-top:16px;display:none;}
+.estado-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;}
+.estado-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.hist-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-start;}
+.hist-left .name{font-weight:600;font-size:14px;}
+.hist-left .song{font-size:12px;color:var(--accent2);margin-top:2px;}
+.hist-right{font-size:12px;color:var(--muted);min-width:40px;text-align:right;}
+.btn-limpiar{width:100%;padding:12px;background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;margin-top:16px;}
+.qr-section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;}
+.qr-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);margin-bottom:4px;}
+.qr-sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+#qrcode{display:flex;justify-content:center;margin-bottom:16px;}
+#qrcode canvas,#qrcode img{border-radius:10px;border:4px solid #fff;}
+.link-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--blue);word-break:break-all;margin-bottom:12px;cursor:pointer;}
+.btn-copy{width:100%;padding:12px;background:var(--blue);color:#000;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;}
+.copy-ok{color:var(--green);font-size:13px;display:none;margin-top:4px;}
+.pin-change-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:16px;}
+.section-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:18px 0 10px;}
+.section-title:first-child{margin-top:0;}
+.empty{text-align:center;padding:50px 20px;color:var(--muted);}
+.empty .icon{font-size:44px;margin-bottom:12px;}
+.empty p{font-size:14px;}
+.dragging{opacity:.35;}
+.drag-over{border:2px dashed var(--accent)!important;}
+</style>
+</head>
+<body>
+
+<div id="screen-login">
+  <div class="login-logo">🎤 Remiendo<br><span style="color:var(--text)">al Corazón</span></div>
+  <div class="login-sub">Sistema de turnos de karaoke</div>
+  <button class="login-btn btn-animador" onclick="abrirPin()">🎛 Entrar como Animador</button>
+  <button class="login-btn btn-cliente" onclick="entrarCliente()">🎵 Pedir mi turno</button>
+</div>
+
+<div class="pin-modal" id="pin-modal">
+  <div class="pin-box">
+    <div class="pin-title">🔐 Acceso Animador</div>
+    <div class="pin-sub">Ingresa tu PIN de 4 dígitos</div>
+    <input class="pin-input" type="password" id="pin-input" maxlength="4" placeholder="••••" inputmode="numeric" onkeydown="if(event.key==='Enter')verificarPin()">
+    <div class="pin-error" id="pin-error">PIN incorrecto. Intenta de nuevo.</div>
+    <div class="pin-actions">
+      <button class="pin-btn pin-cancel" onclick="cerrarPin()">Cancelar</button>
+      <button class="pin-btn pin-enter" onclick="verificarPin()">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="screen-app">
+  <header>
+    <div class="logo">Remiendo <span>al Corazón</span></div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="perfil-chip" id="perfil-chip"></span>
+      <span class="logout-btn" onclick="cerrarSesion()">Salir</span>
+    </div>
+  </header>
+  <div class="tabs" id="tabs-container"></div>
+
+  <div class="view" id="view-pedir">
+    <div class="estado-card" id="estado-box" style="display:none">
+      <div class="estado-label">📋 Estado de tu solicitud</div>
+      <div id="estado-text"></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;">En escena ahora</div>
+      <div id="en-escena" style="font-weight:700;font-size:15px;color:var(--accent);">Esperando inicio de noche...</div>
+    </div>
+    <div class="form-card">
+      <div class="form-title">🎵 Solicitar turno</div>
+      <div class="field"><label>Tu nombre</label><input type="text" id="c-nombre" placeholder="Ej: María López" maxlength="40"></div>
+      <div class="field"><label>Canción</label><input type="text" id="c-cancion" placeholder="Ej: Bésame Mucho" maxlength="60"></div>
+      <div class="field"><label>Artista</label><input type="text" id="c-artista" placeholder="Ej: Los Panchos" maxlength="40"></div>
+      <div class="field">
+        <label>Género musical</label>
+        <select id="c-genero">
+          <option value="">— Seleccionar —</option>
+          <option>Balada romántica</option><option>Salsa</option><option>Merengue</option>
+          <option>Bachata</option><option>Reggaetón</option><option>Cumbia</option>
+          <option>Rock en español</option><option>Pop latino</option>
+          <option>Vallenato</option><option>Bolero</option><option>Otro</option>
+        </select>
+      </div>
+      <div class="field"><label>Mesa / Grupo</label><input type="text" id="c-mesa" placeholder="Ej: Mesa 4" maxlength="30"></div>
+      <div class="field"><label>Nota especial (opcional)</label><textarea id="c-nota" placeholder="Ej: Es mi cumpleaños 🎂, dedicatoria..."></textarea></div>
+      <button class="btn-primary" onclick="enviarSolicitud()">Enviar solicitud 🎤</button>
+      <div class="success-msg" id="success-msg">✅ ¡Solicitud enviada! El animador la revisará pronto.</div>
+    </div>
+  </div>
+
+  <div class="view" id="view-cola">
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num" id="s-pend" style="color:var(--gold)">0</div><div class="stat-label">Nuevas</div></div>
+      <div class="stat-box"><div class="stat-num" id="s-cola" style="color:var(--green)">0</div><div class="stat-label">En cola</div></div>
+      <div class="stat-box"><div class="stat-num" id="s-total" style="color:var(--muted)">0</div><div class="stat-label">Esta noche</div></div>
+    </div>
+    <div id="lista-pendientes"></div>
+    <div id="lista-cola"></div>
+  </div>
+
+  <div class="view" id="view-stats">
+    <div class="section-title">🎵 Canciones más pedidas</div>
+    <div id="chart-canciones"></div>
+    <div class="section-title" style="margin-top:24px">🎸 Géneros más pedidos</div>
+    <div id="chart-generos"></div>
+    <div class="section-title" style="margin-top:24px">📊 Resumen</div>
+    <div class="stats-row" style="margin-bottom:0">
+      <div class="stat-box"><div class="stat-num" id="st-total" style="color:var(--accent)">0</div><div class="stat-label">Cantaron</div></div>
+      <div class="stat-box"><div class="stat-num" id="st-gen" style="color:var(--purple)">0</div><div class="stat-label">Géneros</div></div>
+      <div class="stat-box"><div class="stat-num" id="st-art" style="color:var(--blue)">0</div><div class="stat-label">Artistas únicos</div></div>
+    </div>
+  </div>
+
+  <div class="view" id="view-historial">
+    <div id="lista-historial"></div>
+    <button class="btn-limpiar" onclick="limpiarHistorial()">🗑 Limpiar historial</button>
+  </div>
+
+  <div class="view" id="view-qr">
+    <div class="qr-section">
+      <div class="qr-title">📲 Comparte la app</div>
+      <div class="qr-sub">Los clientes escanean el QR o usan el link</div>
+      <div id="qrcode"></div>
+      <div class="link-box" id="link-display" onclick="copiarLink()">—</div>
+      <button class="btn-copy" onclick="copiarLink()">📋 Copiar link para Instagram</button>
+      <div class="copy-ok" id="copy-ok">✅ ¡Link copiado!</div>
+    </div>
+    <div class="pin-change-box">
+      <div class="section-title" style="margin-top:0">🔐 Cambiar PIN del animador</div>
+      <div class="field" style="margin-bottom:10px"><label>PIN actual</label><input type="password" id="pin-actual" maxlength="4" placeholder="••••" inputmode="numeric"></div>
+      <div class="field" style="margin-bottom:10px"><label>PIN nuevo (4 dígitos)</label><input type="password" id="pin-nuevo" maxlength="4" placeholder="••••" inputmode="numeric"></div>
+      <button class="btn-primary" style="margin-top:0" onclick="cambiarPin()">Guardar nuevo PIN</button>
+      <div id="pin-msg" style="font-size:13px;margin-top:10px;display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let rol=null,solicitudes=JSON.parse(localStorage.getItem('rac_sol')||'[]'),historial=JSON.parse(localStorage.getItem('rac_hist')||'[]'),contador=parseInt(localStorage.getItem('rac_cont')||'0'),PIN=localStorage.getItem('rac_pin')||'1234',miId=null,qrHecho=false,dragSrcId=null;
+
+function guardar(){localStorage.setItem('rac_sol',JSON.stringify(solicitudes));localStorage.setItem('rac_hist',JSON.stringify(historial));localStorage.setItem('rac_cont',contador);}
+
+function abrirPin(){document.getElementById('pin-modal').classList.add('open');setTimeout(()=>document.getElementById('pin-input').focus(),150);}
+function cerrarPin(){document.getElementById('pin-modal').classList.remove('open');document.getElementById('pin-input').value='';document.getElementById('pin-error').style.display='none';}
+function verificarPin(){if(document.getElementById('pin-input').value===PIN){cerrarPin();iniciarApp('animador');}else{document.getElementById('pin-error').style.display='block';document.getElementById('pin-input').value='';document.getElementById('pin-input').focus();}}
+function entrarCliente(){iniciarApp('cliente');}
+function cerrarSesion(){rol=null;miId=null;document.getElementById('screen-login').style.display='flex';document.getElementById('screen-app').style.display='none';}
+
+function iniciarApp(r){
+  rol=r;
+  document.getElementById('screen-login').style.display='none';
+  document.getElementById('screen-app').style.display='block';
+  const chip=document.getElementById('perfil-chip');
+  if(r==='animador'){chip.textContent='🎛 Animador';chip.className='perfil-chip chip-animador';buildTabs(['cola','stats','historial','qr'],['🎛 Cola','📊 Stats','🎶 Historial','📲 Compartir']);switchTab('cola');}
+  else{chip.textContent='🎵 Cliente';chip.className='perfil-chip chip-cliente';buildTabs(['pedir'],['🎵 Pedir turno']);switchTab('pedir');}
+}
+
+function buildTabs(ids,labels){document.getElementById('tabs-container').innerHTML=ids.map((id,i)=>`<div class="tab" id="tab-${id}" onclick="switchTab('${id}')">${labels[i]}</div>`).join('');}
+function switchTab(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const t=document.getElementById('tab-'+id),v=document.getElementById('view-'+id);
+  if(t)t.classList.add('active');if(v)v.classList.add('active');
+  if(id==='cola')renderCola();if(id==='stats')renderStats();if(id==='historial')renderHistorial();if(id==='qr')renderQR();if(id==='pedir')renderCliente();
+}
+
+function enviarSolicitud(){
+  const nombre=document.getElementById('c-nombre').value.trim(),cancion=document.getElementById('c-cancion').value.trim(),artista=document.getElementById('c-artista').value.trim(),genero=document.getElementById('c-genero').value,mesa=document.getElementById('c-mesa').value.trim(),nota=document.getElementById('c-nota').value.trim();
+  if(!nombre||!cancion||!artista||!mesa){alert('Completa nombre, canción, artista y mesa.');return;}
+  const t={id:Date.now(),nombre,cancion,artista,genero,mesa,nota,estado:'pendiente',hora:new Date().toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'})};
+  solicitudes.push(t);miId=t.id;guardar();
+  ['c-nombre','c-cancion','c-artista','c-mesa','c-nota'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('c-genero').value='';
+  const sm=document.getElementById('success-msg');sm.style.display='block';setTimeout(()=>sm.style.display='none',3500);
+  renderCliente();
+}
+
+function renderCliente(){
+  solicitudes=JSON.parse(localStorage.getItem('rac_sol')||'[]');
+  const c=solicitudes.find(s=>s.estado==='cantando');
+  document.getElementById('en-escena').textContent=c?`🎤 ${c.nombre} — "${c.cancion}"` :'Nadie en escena aún';
+  if(!miId)return;
+  const t=solicitudes.find(s=>s.id===miId),box=document.getElementById('estado-box'),txt=document.getElementById('estado-text');
+  box.style.display='block';
+  if(!t){txt.innerHTML=`<span style="color:var(--accent)">❌ Tu solicitud fue rechazada. Puedes enviar una nueva.</span>`;miId=null;}
+  else if(t.estado==='pendiente'){txt.innerHTML=`<span style="color:var(--gold)">⏳ Pendiente de aprobación...</span><br><span style="font-size:12px;color:var(--muted)">"${t.cancion}" — ${t.artista}</span>`;}
+  else if(t.estado==='aprobado'){txt.innerHTML=`<span style="color:var(--green)">✅ ¡Aprobada! Estás en la cola.</span><br><span style="font-size:12px;color:var(--muted)">"${t.cancion}" — ${t.artista}</span>`;}
+  else if(t.estado==='cantando'){txt.innerHTML=`<span style="color:var(--accent)">🎤 ¡Es tu turno! Sube al escenario 🎉</span>`;}
+}
+
+const GENS=['','Balada romántica','Salsa','Merengue','Bachata','Reggaetón','Cumbia','Rock en español','Pop latino','Vallenato','Bolero','Otro'];
+function genOpts(sel){return GENS.map(o=>`<option${o===sel?' selected':''}>${o}</option>`).join('');}
+
+function renderCola(){
+  const pend=solicitudes.filter(s=>s.estado==='pendiente'),aprob=solicitudes.filter(s=>s.estado==='aprobado'),cant=solicitudes.filter(s=>s.estado==='cantando');
+  document.getElementById('s-pend').textContent=pend.length;document.getElementById('s-cola').textContent=aprob.length;document.getElementById('s-total').textContent=contador;
+  const tb=document.getElementById('tab-cola');if(tb)tb.innerHTML=`🎛 Cola${pend.length>0?` <span class="tab-badge">${pend.length}</span>`:''}`;
+  const c=cant[0];document.getElementById('en-escena').textContent=c?`🎤 ${c.nombre} — "${c.cancion}"` :'Nadie en escena aún';
+
+  let hp=pend.length>0?`<div class="section-title">⏳ Nuevas solicitudes (${pend.length})</div>`+pend.map(cardPend).join(''):'';
+  let hc='';
+  if(cant.length>0||aprob.length>0){hc=`<div class="section-title">🎤 En escena y cola</div>`;cant.forEach(t=>{hc+=cardCant(t);});aprob.forEach((t,i)=>{hc+=cardAprob(t,i+1);});}
+  if(!hp&&!hc)hp=`<div class="empty"><div class="icon">🎵</div><p>Sin solicitudes aún.<br>¡La noche está por comenzar!</p></div>`;
+  document.getElementById('lista-pendientes').innerHTML=hp;document.getElementById('lista-cola').innerHTML=hc;initDrag();
+}
+
+function cardPend(t){return `<div class="turno-card pendiente" data-id="${t.id}"><div class="turno-header"><div class="turno-info"><div class="turno-nombre">${t.nombre} <span style="color:var(--muted);font-weight:400">· ${t.mesa}</span></div><div class="turno-cancion">🎵 "${t.cancion}" — ${t.artista}</div><div class="turno-meta">📨 ${t.hora}</div>${t.nota?`<div class="nota-chip">⭐ ${t.nota}</div>`:''}${t.genero?`<div class="genero-chip">🎸 ${t.genero}</div>`:''}<select class="genre-edit" onchange="editGenero(${t.id},this.value)">${genOpts(t.genero)}</select></div><span class="badge pendiente">Nuevo</span></div><div class="turno-actions"><button class="btn-sm btn-aprobar" onclick="aprobar(${t.id})">✅ Aprobar</button><button class="btn-sm btn-rechazar" onclick="rechazar(${t.id})">✗ Rechazar</button></div></div>`;}
+
+function cardAprob(t,pos){return `<div class="turno-card aprobado" draggable="true" data-id="${t.id}"><div class="turno-header"><div class="drag-handle">⠿</div><div class="turno-info"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:3px">TURNO #${pos}</div><div class="turno-nombre">${t.nombre} <span style="color:var(--muted);font-weight:400">· ${t.mesa}</span></div><div class="turno-cancion">🎵 "${t.cancion}" — ${t.artista}</div>${t.nota?`<div class="nota-chip">⭐ ${t.nota}</div>`:''}${t.genero?`<div class="genero-chip">🎸 ${t.genero}</div>`:''}<select class="genre-edit" onchange="editGenero(${t.id},this.value)">${genOpts(t.genero)}</select></div><span class="badge aprobado">En cola</span></div><div class="turno-actions"><button class="btn-sm btn-cantar" onclick="pasarEscena(${t.id})">🎤 Escena</button><button class="btn-sm btn-mover" onclick="mover(${t.id},-1)">▲</button><button class="btn-sm btn-mover" onclick="mover(${t.id},1)">▼</button><button class="btn-sm btn-rechazar" onclick="rechazar(${t.id})">✗</button></div></div>`;}
+
+function cardCant(t){return `<div class="turno-card cantando" data-id="${t.id}"><div class="turno-header"><div class="turno-info"><div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:3px">🎤 EN ESCENA</div><div class="turno-nombre">${t.nombre} <span style="color:var(--muted);font-weight:400">· ${t.mesa}</span></div><div class="turno-cancion">🎵 "${t.cancion}" — ${t.artista}</div>${t.nota?`<div class="nota-chip">⭐ ${t.nota}</div>`:''}${t.genero?`<div class="genero-chip">🎸 ${t.genero}</div>`:''}</div><span class="badge cantando">En vivo</span></div><div class="turno-actions"><button class="btn-sm btn-listo" onclick="finalizar(${t.id})">✓ Terminó</button></div></div>`;}
+
+function editGenero(id,val){const t=solicitudes.find(s=>s.id===id);if(t){t.genero=val;guardar();}}
+function aprobar(id){const t=solicitudes.find(s=>s.id===id);if(t){t.estado='aprobado';guardar();renderCola();}}
+function rechazar(id){solicitudes=solicitudes.filter(s=>s.id!==id);guardar();renderCola();}
+function pasarEscena(id){solicitudes.forEach(s=>{if(s.estado==='cantando')s.estado='aprobado';});const t=solicitudes.find(s=>s.id===id);if(t){t.estado='cantando';guardar();renderCola();}}
+function finalizar(id){const t=solicitudes.find(s=>s.id===id);if(t){historial.unshift({...t,horaFin:new Date().toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'})});solicitudes=solicitudes.filter(s=>s.id!==id);contador++;guardar();renderCola();}}
+function mover(id,dir){const aprob=solicitudes.filter(s=>s.estado==='aprobado'),idx=aprob.findIndex(s=>s.id===id),nIdx=idx+dir;if(nIdx<0||nIdx>=aprob.length)return;const ai=solicitudes.indexOf(aprob[idx]),bi=solicitudes.indexOf(aprob[nIdx]);[solicitudes[ai],solicitudes[bi]]=[solicitudes[bi],solicitudes[ai]];guardar();renderCola();}
+
+function initDrag(){
+  document.querySelectorAll('#lista-cola .turno-card[draggable="true"]').forEach(card=>{
+    card.addEventListener('dragstart',()=>{dragSrcId=parseInt(card.dataset.id);card.classList.add('dragging');});
+    card.addEventListener('dragend',()=>{card.classList.remove('dragging');document.querySelectorAll('.drag-over').forEach(c=>c.classList.remove('drag-over'));});
+    card.addEventListener('dragover',e=>{e.preventDefault();card.classList.add('drag-over');});
+    card.addEventListener('dragleave',()=>card.classList.remove('drag-over'));
+    card.addEventListener('drop',e=>{e.preventDefault();card.classList.remove('drag-over');const destId=parseInt(card.dataset.id);if(dragSrcId===destId)return;const si=solicitudes.findIndex(s=>s.id===dragSrcId),di=solicitudes.findIndex(s=>s.id===destId);const[moved]=solicitudes.splice(si,1);solicitudes.splice(di,0,moved);guardar();renderCola();});
+  });
+}
+
+function renderStats(){
+  const todos=[...historial,...solicitudes.filter(s=>s.estado==='cantando')];
+  const genMap={},songMap={},artSet=new Set();
+  todos.forEach(t=>{if(t.genero)genMap[t.genero]=(genMap[t.genero]||0)+1;const key=`${t.cancion} — ${t.artista}`;songMap[key]=(songMap[key]||0)+1;if(t.artista)artSet.add(t.artista.toLowerCase());});
+  document.getElementById('st-total').textContent=historial.length;document.getElementById('st-gen').textContent=Object.keys(genMap).length;document.getElementById('st-art').textContent=artSet.size;
+  const colors=['var(--accent)','var(--gold)','var(--green)','var(--blue)','var(--purple)','var(--accent2)'];
+  const songs=Object.entries(songMap).sort((a,b)=>b[1]-a[1]).slice(0,8),maxS=songs[0]?.[1]||1;
+  document.getElementById('chart-canciones').innerHTML=songs.length===0?'<div style="color:var(--muted);font-size:13px;padding:8px 0">Aún no hay canciones registradas.</div>':songs.map(([k,v],i)=>`<div class="chart-bar-row"><div class="chart-bar-label" title="${k}">${k}</div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${(v/maxS*100).toFixed(0)}%;background:${colors[i%colors.length]}"></div></div><div class="chart-bar-count">${v}</div></div>`).join('');
+  const gens=Object.entries(genMap).sort((a,b)=>b[1]-a[1]),maxG=gens[0]?.[1]||1;
+  document.getElementById('chart-generos').innerHTML=gens.length===0?'<div style="color:var(--muted);font-size:13px;padding:8px 0">Aún no hay géneros registrados.</div>':gens.map(([k,v],i)=>`<div class="chart-bar-row"><div class="chart-bar-label">${k}</div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${(v/maxG*100).toFixed(0)}%;background:${colors[i%colors.length]}"></div></div><div class="chart-bar-count">${v}</div></div>`).join('');
+}
+
+function renderHistorial(){
+  const el=document.getElementById('lista-historial');
+  if(historial.length===0){el.innerHTML=`<div class="empty"><div class="icon">🎶</div><p>Sin historial esta noche.</p></div>`;return;}
+  el.innerHTML=`<div class="section-title">🎶 Esta noche (${historial.length})</div>`+historial.map(t=>`<div class="hist-item"><div class="hist-left"><div class="name">${t.nombre} · ${t.mesa}</div><div class="song">🎵 "${t.cancion}" — ${t.artista}</div>${t.genero?`<div style="font-size:11px;color:var(--purple);margin-top:2px">🎸 ${t.genero}</div>`:''}${t.nota?`<div style="font-size:11px;color:var(--gold);margin-top:2px">⭐ ${t.nota}</div>`:''}</div><div class="hist-right">${t.horaFin||t.hora}</div></div>`).join('');
+}
+function limpiarHistorial(){if(confirm('¿Limpiar el historial de esta noche?')){historial=[];contador=0;guardar();renderHistorial();}}
+
+function renderQR(){
+  const url=window.location.href.split('?')[0];
+  document.getElementById('link-display').textContent=url;
+  if(!qrHecho){new QRCode(document.getElementById('qrcode'),{text:url,width:200,height:200,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});qrHecho=true;}
+}
+function copiarLink(){const url=window.location.href.split('?')[0];navigator.clipboard.writeText(url).then(()=>{const ok=document.getElementById('copy-ok');ok.style.display='block';setTimeout(()=>ok.style.display='none',2500);});}
+
+function cambiarPin(){
+  const actual=document.getElementById('pin-actual').value,nuevo=document.getElementById('pin-nuevo').value,msg=document.getElementById('pin-msg');
+  if(actual!==PIN){msg.style.display='block';msg.style.color='var(--accent)';msg.textContent='PIN actual incorrecto.';return;}
+  if(!/^\d{4}$/.test(nuevo)){msg.style.display='block';msg.style.color='var(--accent)';msg.textContent='El PIN nuevo debe ser de 4 dígitos.';return;}
+  PIN=nuevo;localStorage.setItem('rac_pin',PIN);document.getElementById('pin-actual').value='';document.getElementById('pin-nuevo').value='';
+  msg.style.display='block';msg.style.color='var(--green)';msg.textContent='✅ PIN actualizado.';setTimeout(()=>msg.style.display='none',3000);
+}
+
+setInterval(()=>{if(rol==='cliente')renderCliente();},3000);
+</script>
+</body>
+</html>
