@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VerifIA — Detector de Texto con IA</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  --bg: #f8f7f4;
+  --surface: #ffffff;
+  --border: #e8e4dc;
+  --accent: #2d5be3;
+  --accent2: #1a3fa8;
+  --warn: #e85d2d;
+  --green: #1a7a4a;
+  --yellow: #d4840a;
+  --text: #1a1a1a;
+  --muted: #6b6b6b;
+  --light: #f0ede6;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* HEADER */
+.header {
+  background: var(--text);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  font-family: 'Space Mono', monospace;
+  font-size: 20px;
+  color: #fff;
+  letter-spacing: -1px;
+}
+.logo span { color: #6ee7ff; }
+.plan-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+.plan-free { background: #333; color: #aaa; }
+.plan-pro  { background: var(--accent); color: #fff; }
+
+/* HERO */
+.hero {
+  background: var(--text);
+  padding: 40px 24px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50px; left: -50px; right: -50px;
+  height: 200px;
+  background: radial-gradient(ellipse at 50% 0%, #2d5be340 0%, transparent 70%);
+}
+.hero h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  position: relative;
+}
+.hero h1 span { color: #6ee7ff; }
+.hero p {
+  font-size: 15px;
+  color: #aaa;
+  max-width: 400px;
+  margin: 0 auto 20px;
+  position: relative;
+}
+.uses-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #222;
+  border: 1px solid #333;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 13px;
+  color: #ddd;
+  position: relative;
+}
+.uses-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #6ee7ff;
+}
+
+/* MAIN */
+.main { max-width: 680px; margin: 0 auto; padding: 24px 16px; }
+
+/* TEXTAREA CARD */
+.input-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+.input-card-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.input-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.word-count {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+}
+textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 16px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  border: none;
+  outline: none;
+  resize: vertical;
+  background: transparent;
+  color: var(--text);
+}
+.input-card-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.btn-clear {
+  font-size: 13px;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+.btn-clear:hover { background: var(--light); }
+.btn-analyze {
+  flex: 1;
+  padding: 12px 24px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s;
+}
+.btn-analyze:hover { background: var(--accent2); }
+.btn-analyze:disabled { background: #ccc; cursor: not-allowed; }
+
+/* LOADING */
+.loading {
+  display: none;
+  text-align: center;
+  padding: 40px 20px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  margin-bottom: 16px;
+}
+.loading-bar {
+  width: 100%;
+  height: 4px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 16px 0 8px;
+}
+.loading-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+  animation: loading-anim 2s ease-in-out infinite;
+}
+@keyframes loading-anim {
+  0%   { width: 0%; margin-left: 0; }
+  50%  { width: 60%; margin-left: 20%; }
+  100% { width: 0%; margin-left: 100%; }
+}
+.loading p { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+/* RESULTADO */
+.result-card {
+  display: none;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+
+/* MEDIDOR */
+.meter-section {
+  padding: 24px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.meter-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+.meter-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  border: 8px solid var(--border);
+  position: relative;
+}
+.meter-pct {
+  font-family: 'Space Mono', monospace;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+}
+.meter-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.verdict-high   { background: #ffeee8; color: var(--warn); }
+.verdict-medium { background: #fff8e6; color: var(--yellow); }
+.verdict-low    { background: #e8f7ed; color: var(--green); }
+
+/* TABS DE RESULTADO */
+.result-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+.result-tab {
+  flex: 1;
+  padding: 12px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+}
+.result-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.result-panel { display: none; padding: 20px; }
+.result-panel.active { display: block; }
+
+/* TEXTO ANALIZADO */
+.analyzed-text {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text);
+}
+.highlight-ai {
+  background: #ffd6cc;
+  border-bottom: 2px solid var(--warn);
+  border-radius: 3px;
+  padding: 1px 2px;
+  cursor: help;
+}
+.highlight-human {
+  background: #d4f0e0;
+  border-bottom: 2px solid var(--green);
+  border-radius: 3px;
+  padding: 1px 2px;
+}
+
+/* SUGERENCIAS */
+.suggestion-item {
+  background: var(--light);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+.suggestion-item.warning { border-left-color: var(--warn); }
+.suggestion-item.tip { border-left-color: var(--green); }
+.suggestion-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.suggestion-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+}
+.original-text {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin: 8px 0 4px;
+  color: var(--warn);
+}
+.suggested-text {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: var(--green);
+}
+
+/* RESUMEN */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.summary-box {
+  background: var(--light);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+}
+.summary-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+.summary-lbl { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+/* PAYWALL */
+.paywall {
+  display: none;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-align: center;
+  margin-bottom: 16px;
+  color: #fff;
+}
+.paywall h2 { font-size: 22px; margin-bottom: 8px; }
+.paywall p  { font-size: 14px; color: #aaa; margin-bottom: 24px; }
+.plan-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+.plan-card {
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: left;
+}
+.plan-card.featured { border-color: #6ee7ff; background: rgba(110,231,255,.08); }
+.plan-name { font-size: 13px; font-weight: 700; color: #6ee7ff; margin-bottom: 4px; }
+.plan-price { font-family: 'Space Mono', monospace; font-size: 24px; font-weight: 700; color: #fff; }
+.plan-price span { font-size: 13px; color: #aaa; }
+.plan-features { margin-top: 10px; }
+.plan-feature { font-size: 12px; color: #ccc; margin-bottom: 4px; }
+.plan-feature::before { content: '✓ '; color: #6ee7ff; }
+.btn-upgrade {
+  width: 100%;
+  padding: 14px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* SECCIÓN EMPTY */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--muted);
+}
+.empty-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-state p { font-size: 14px; }
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 12px;
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">Verif<span>IA</span></div>
+  <div class="plan-badge plan-free" id="plan-badge">Plan Gratis · <span id="uses-counter">3</span> análisis</div>
+</div>
+
+<div class="hero">
+  <h1>¿Lo escribió<br>una <span>inteligencia artificial</span>?</h1>
+  <p>Analiza cualquier texto y descubre si fue generado por IA, con sugerencias para hacerlo más humano.</p>
+  <div class="uses-left">
+    <div class="uses-dot"></div>
+    <span id="hero-uses">3 análisis gratuitos disponibles</span>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- INPUT -->
+  <div class="input-card" id="input-section">
+    <!-- TABS INPUT -->
+    <div style="display:flex;border-bottom:1px solid var(--border);">
+      <div id="tab-texto" onclick="switchInput('texto')" style="flex:1;padding:12px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;color:var(--accent);border-bottom:3px solid var(--accent);">✏️ Pegar texto</div>
+      <div id="tab-archivo" onclick="switchInput('archivo')" style="flex:1;padding:12px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;color:var(--muted);border-bottom:3px solid transparent;">📎 Subir archivo</div>
+    </div>
+    <!-- PANEL TEXTO -->
+    <div id="panel-texto-input">
+      <div class="input-card-header">
+        <span class="input-card-title">📝 Pega tu texto aquí</span>
+        <span class="word-count" id="word-count">0 palabras</span>
+      </div>
+      <textarea id="texto-input" placeholder="Pega aquí el texto que quieres analizar. Mínimo 30 palabras para un análisis preciso..." oninput="actualizarContador()"></textarea>
+    </div>
+    <!-- PANEL ARCHIVO -->
+    <div id="panel-archivo-input" style="display:none;padding:16px;">
+      <div style="border:2px dashed var(--border);border-radius:12px;padding:30px 20px;text-align:center;cursor:pointer;" id="drop-zone" onclick="document.getElementById('file-input').click()">
+        <div style="font-size:40px;margin-bottom:10px">📄</div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:6px">Toca para seleccionar archivo</div>
+        <div style="font-size:13px;color:var(--muted)">Acepta .txt, .pdf, .docx</div>
+        <input type="file" id="file-input" accept=".txt,.pdf,.docx" style="display:none" onchange="procesarArchivo(this.files[0])">
+      </div>
+      <div id="file-status" style="display:none;margin-top:12px;padding:12px;background:var(--light);border-radius:10px;font-size:13px;">
+        <div id="file-name" style="font-weight:700;margin-bottom:4px;"></div>
+        <div id="file-words" style="color:var(--muted);"></div>
+      </div>
+    </div>
+    <div class="input-card-footer">
+      <button class="btn-clear" onclick="limpiar()">🗑 Limpiar</button>
+      <button class="btn-analyze" id="btn-analyze" onclick="analizar()">🔍 Analizar</button>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading" id="loading">
+    <div style="font-size:32px;margin-bottom:8px">🤖</div>
+    <div style="font-weight:700;font-size:16px">Analizando texto...</div>
+    <div class="loading-bar"><div class="loading-fill"></div></div>
+    <p>Detectando patrones de escritura artificial</p>
+  </div>
+
+  <!-- RESULTADO -->
+  <div class="result-card" id="result-card">
+    <div class="meter-section">
+      <div class="meter-label">Probabilidad de texto generado por IA</div>
+      <div class="meter-circle" id="meter-circle">
+        <div class="meter-pct" id="meter-pct">0%</div>
+        <div class="meter-sub">IA detectada</div>
+      </div>
+      <div class="verdict" id="verdict-badge">Analizando...</div>
+    </div>
+
+    <div class="result-tabs">
+      <div class="result-tab active" onclick="showPanel('panel-texto', this)">📄 Texto</div>
+      <div class="result-tab" onclick="showPanel('panel-sugerencias', this)">✏️ Sugerencias</div>
+      <div class="result-tab" onclick="showPanel('panel-resumen', this)">📊 Resumen</div>
+    </div>
+
+    <div class="result-panel active" id="panel-texto">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;display:flex;gap:16px;">
+        <span>🟥 Posible IA</span>
+        <span>🟩 Parece humano</span>
+      </div>
+      <div class="analyzed-text" id="analyzed-text"></div>
+    </div>
+
+    <div class="result-panel" id="panel-sugerencias">
+      <div id="sugerencias-list"></div>
+    </div>
+
+    <div class="result-panel" id="panel-resumen">
+      <div class="summary-grid">
+        <div class="summary-box">
+          <div class="summary-num" id="sum-palabras" style="color:var(--accent)">0</div>
+          <div class="summary-lbl">Palabras analizadas</div>
+        </div>
+        <div class="summary-box">
+          <div class="summary-num" id="sum-ia" style="color:var(--warn)">0%</div>
+          <div class="summary-lbl">Probabilidad IA</div>
+        </div>
+        <div class="summary-box">
+          <div class="summary-num" id="sum-patrones" style="color:var(--yellow)">0</div>
+          <div class="summary-lbl">Patrones IA detectados</div>
+        </div>
+        <div class="summary-box">
+          <div class="summary-num" id="sum-sug" style="color:var(--green)">0</div>
+          <div class="summary-lbl">Sugerencias de mejora</div>
+        </div>
+      </div>
+      <div id="resumen-texto" style="font-size:14px;line-height:1.7;color:var(--muted);background:var(--light);padding:14px;border-radius:10px;"></div>
+    </div>
+  </div>
+
+  <!-- PAYWALL -->
+  <div class="paywall" id="paywall">
+    <div style="font-size:40px;margin-bottom:12px">🔒</div>
+    <h2>Agotaste tus análisis gratuitos</h2>
+    <p>Actualiza tu plan para seguir analizando textos sin límites</p>
+    <div class="plan-cards">
+      <div class="plan-card">
+        <div class="plan-name">ESTUDIANTE</div>
+        <div class="plan-price">$4.99<span>/mes</span></div>
+        <div class="plan-features">
+          <div class="plan-feature">Análisis ilimitados</div>
+          <div class="plan-feature">Hasta 5,000 palabras</div>
+          <div class="plan-feature">Reporte PDF</div>
+        </div>
+      </div>
+      <div class="plan-card featured">
+        <div class="plan-name">PROFESIONAL</div>
+        <div class="plan-price">$9.99<span>/mes</span></div>
+        <div class="plan-features">
+          <div class="plan-feature">Análisis ilimitados</div>
+          <div class="plan-feature">Sin límite de palabras</div>
+          <div class="plan-feature">Reporte PDF detallado</div>
+          <div class="plan-feature">Historial de análisis</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-upgrade" onclick="alert('Próximamente: integración con pagos 🚀')">Actualizar plan →</button>
+  </div>
+
+  <div class="footer">
+    VerifIA © 2026 · Detector de texto generado por IA<br>
+    <span style="color:#aaa">Basado en análisis de patrones lingüísticos</span>
+  </div>
+</div>
+
+<script>
+// ── SWITCH INPUT TABS ──────────────────────────────────────
+function switchInput(tipo) {
+  const tabTexto   = document.getElementById('tab-texto');
+  const tabArchivo = document.getElementById('tab-archivo');
+  const panelTexto  = document.getElementById('panel-texto-input');
+  const panelArchivo = document.getElementById('panel-archivo-input');
+  if (tipo === 'texto') {
+    tabTexto.style.color = 'var(--accent)'; tabTexto.style.borderBottom = '3px solid var(--accent)';
+    tabArchivo.style.color = 'var(--muted)'; tabArchivo.style.borderBottom = '3px solid transparent';
+    panelTexto.style.display = 'block'; panelArchivo.style.display = 'none';
+  } else {
+    tabArchivo.style.color = 'var(--accent)'; tabArchivo.style.borderBottom = '3px solid var(--accent)';
+    tabTexto.style.color = 'var(--muted)'; tabTexto.style.borderBottom = '3px solid transparent';
+    panelArchivo.style.display = 'block'; panelTexto.style.display = 'none';
+  }
+}
+
+// ── PROCESAMIENTO DE ARCHIVOS ──────────────────────────────
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('drop-zone').style.borderColor = 'var(--border)';
+  const file = e.dataTransfer.files[0];
+  if (file) procesarArchivo(file);
+}
+
+async function procesarArchivo(file) {
+  if (!file) return;
+  const ext = file.name.split('.').pop().toLowerCase();
+  const status = document.getElementById('file-status');
+  const fileName = document.getElementById('file-name');
+  const fileWords = document.getElementById('file-words');
+
+  try {
+    let texto = '';
+
+    if (ext === 'txt') {
+      texto = await file.text();
+
+    } else if (ext === 'pdf') {
+      // Usar PDF.js para extraer texto
+      const pdfjsLib = await import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
+      let fullText = '';
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        fullText += content.items.map(item => item.str).join(' ') + '\n';
+      }
+      texto = fullText;
+
+    } else if (ext === 'docx') {
+      // Usar mammoth para extraer texto de Word
+      const mammoth = await import('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');
+      const arrayBuffer = await file.arrayBuffer();
+      const result = await mammoth.extractRawText({arrayBuffer});
+      texto = result.value;
+
+    } else {
+      alert('Formato no soportado. Usa .txt, .pdf o .docx');
+      return;
+    }
+
+    texto = texto.trim();
+    if (!texto) { alert('No se pudo extraer texto del archivo.'); return; }
+
+    // Poner texto en el textarea y cambiar a tab texto
+    document.getElementById('texto-input').value = texto;
+    switchInput('texto');
+    actualizarContador();
+
+    const words = texto.split(/\s+/).length;
+    fileName.textContent = '✅ ' + file.name;
+    fileWords.textContent = `${words} palabras extraídas`;
+    status.style.display = 'block';
+
+  } catch(e) {
+    console.error(e);
+    // Fallback: intentar leer como texto plano
+    try {
+      const texto = await file.text();
+      document.getElementById('texto-input').value = texto;
+      switchInput('texto');
+      actualizarContador();
+      fileName.textContent = '✅ ' + file.name;
+      fileWords.textContent = `${texto.split(/\s+/).length} palabras extraídas`;
+      status.style.display = 'block';
+    } catch(e2) {
+      alert('Error al procesar el archivo. Intenta con formato .txt');
+    }
+  }
+}
+
+// ── ESTADO ─────────────────────────────────────────────────
+let usosRestantes = parseInt(localStorage.getItem('verifia_usos') || '3');
+let esPro = localStorage.getItem('verifia_pro') === 'true';
+
+function actualizarUI() {
+  document.getElementById('uses-counter').textContent = usosRestantes;
+  document.getElementById('hero-uses').textContent = esPro
+    ? 'Plan Pro — análisis ilimitados'
+    : `${usosRestantes} análisis gratuito${usosRestantes !== 1 ? 's' : ''} disponible${usosRestantes !== 1 ? 's' : ''}`;
+  document.getElementById('plan-badge').innerHTML = esPro
+    ? 'Plan Pro ⭐'
+    : `Plan Gratis · <span id="uses-counter">${usosRestantes}</span> análisis`;
+  if (esPro) document.getElementById('plan-badge').className = 'plan-badge plan-pro';
+}
+actualizarUI();
+
+function actualizarContador() {
+  const txt = document.getElementById('texto-input').value.trim();
+  const words = txt ? txt.split(/\s+/).length : 0;
+  document.getElementById('word-count').textContent = `${words} palabra${words !== 1 ? 's' : ''}`;
+}
+
+function limpiar() {
+  document.getElementById('texto-input').value = '';
+  document.getElementById('word-count').textContent = '0 palabras';
+  document.getElementById('result-card').style.display = 'none';
+  document.getElementById('paywall').style.display = 'none';
+  document.getElementById('file-status').style.display = 'none';
+  document.getElementById('file-input').value = '';
+}
+
+function showPanel(id, tab) {
+  document.querySelectorAll('.result-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.result-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  tab.classList.add('active');
+}
+
+// ── ANÁLISIS ───────────────────────────────────────────────
+async function analizar() {
+  const texto = document.getElementById('texto-input').value.trim();
+  if (!texto) { alert('Por favor ingresa un texto para analizar.'); return; }
+  const words = texto.split(/\s+/).length;
+  if (words < 30) { alert('El texto debe tener al menos 30 palabras para un análisis preciso.'); return; }
+
+  if (!esPro && usosRestantes <= 0) {
+    document.getElementById('paywall').style.display = 'block';
+    document.getElementById('result-card').style.display = 'none';
+    return;
+  }
+
+  // Mostrar loading
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('result-card').style.display = 'none';
+  document.getElementById('paywall').style.display = 'none';
+  document.getElementById('btn-analyze').disabled = true;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: `Eres un experto detector de texto generado por inteligencia artificial. Analiza el texto y responde SOLO en JSON válido sin markdown, sin explicaciones adicionales, sin backticks.
+
+El JSON debe tener exactamente esta estructura:
+{
+  "porcentaje_ia": número del 0 al 100,
+  "veredicto": "ALTO" | "MEDIO" | "BAJO",
+  "resumen": "resumen ejecutivo de 2-3 oraciones en español",
+  "patrones_ia": ["patrón detectado 1", "patrón detectado 2"],
+  "fragmentos_ia": ["frase o fragmento que suena a IA 1", "frase 2"],
+  "fragmentos_humanos": ["frase que suena humana 1"],
+  "sugerencias": [
+    {
+      "tipo": "warning" | "tip",
+      "titulo": "título corto",
+      "problema": "qué está mal",
+      "original": "fragmento original con problema",
+      "sugerido": "versión mejorada y más humana"
+    }
+  ]
+}
+
+Sé preciso y específico. Los fragmentos deben ser texto EXACTO del documento analizado.`,
+        messages: [{ role: 'user', content: `Analiza este texto:\n\n${texto}` }]
+      })
+    });
+
+    const data = await response.json();
+    const raw = data.content[0].text.trim();
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const result = JSON.parse(clean);
+
+    // Descontar uso
+    if (!esPro) {
+      usosRestantes = Math.max(0, usosRestantes - 1);
+      localStorage.setItem('verifia_usos', usosRestantes);
+      actualizarUI();
+    }
+
+    mostrarResultado(texto, result);
+
+  } catch(e) {
+    alert('Error al analizar. Intenta de nuevo.');
+    console.error(e);
+  } finally {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('btn-analyze').disabled = false;
+  }
+}
+
+function mostrarResultado(texto, r) {
+  // Medidor
+  const pct = r.porcentaje_ia || 0;
+  const circle = document.getElementById('meter-circle');
+  const colors = { ALTO: '#e85d2d', MEDIO: '#d4840a', BAJO: '#1a7a4a' };
+  const color = colors[r.veredicto] || '#2d5be3';
+  circle.style.borderColor = color;
+  document.getElementById('meter-pct').style.color = color;
+  document.getElementById('meter-pct').textContent = `${pct}%`;
+
+  const verdicts = {
+    ALTO: '🤖 Muy probable que sea IA',
+    MEDIO: '⚠️ Posiblemente generado por IA',
+    BAJO: '✅ Parece escrito por humano'
+  };
+  const verdictClasses = { ALTO: 'verdict-high', MEDIO: 'verdict-medium', BAJO: 'verdict-low' };
+  const badge = document.getElementById('verdict-badge');
+  badge.textContent = verdicts[r.veredicto] || '';
+  badge.className = `verdict ${verdictClasses[r.veredicto] || ''}`;
+
+  // Texto analizado con highlights
+  let textoHtml = texto;
+  if (r.fragmentos_ia && r.fragmentos_ia.length > 0) {
+    r.fragmentos_ia.forEach(f => {
+      if (f && textoHtml.includes(f)) {
+        textoHtml = textoHtml.replace(f, `<span class="highlight-ai" title="Posible texto generado por IA">${f}</span>`);
+      }
+    });
+  }
+  if (r.fragmentos_humanos && r.fragmentos_humanos.length > 0) {
+    r.fragmentos_humanos.forEach(f => {
+      if (f && textoHtml.includes(f)) {
+        textoHtml = textoHtml.replace(f, `<span class="highlight-human" title="Parece escrito por humano">${f}</span>`);
+      }
+    });
+  }
+  document.getElementById('analyzed-text').innerHTML = textoHtml.replace(/\n/g, '<br>');
+
+  // Sugerencias
+  const sugList = document.getElementById('sugerencias-list');
+  if (r.sugerencias && r.sugerencias.length > 0) {
+    sugList.innerHTML = r.sugerencias.map(s => `
+      <div class="suggestion-item ${s.tipo}">
+        <div class="suggestion-label">${s.tipo === 'warning' ? '⚠️ Problema detectado' : '💡 Sugerencia'} — ${s.titulo}</div>
+        <div class="suggestion-text">${s.problema}</div>
+        ${s.original ? `<div class="original-texto">❌ Original: "${s.original}"</div>` : ''}
+        ${s.sugerido ? `<div class="suggested-text">✅ Sugerido: "${s.sugerido}"</div>` : ''}
+      </div>`).join('');
+  } else {
+    sugList.innerHTML = `<div class="empty-state"><div class="empty-icon">✅</div><p>No se encontraron problemas significativos.</p></div>`;
+  }
+
+  // Resumen
+  document.getElementById('sum-palabras').textContent = texto.split(/\s+/).length;
+  document.getElementById('sum-ia').textContent = `${pct}%`;
+  document.getElementById('sum-patrones').textContent = r.patrones_ia ? r.patrones_ia.length : 0;
+  document.getElementById('sum-sug').textContent = r.sugerencias ? r.sugerencias.length : 0;
+  document.getElementById('resumen-texto').textContent = r.resumen || '';
+
+  document.getElementById('result-card').style.display = 'block';
+  document.getElementById('result-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Mostrar paywall si se acabaron los usos
+  if (!esPro && usosRestantes <= 0) {
+    setTimeout(() => {
+      document.getElementById('paywall').style.display = 'block';
+    }, 1000);
+  }
+}
+
+// ── CÓDIGOS DE ACTIVACIÓN ──────────────────────────────────
+// Códigos válidos — tú los generas y envías al cliente tras el pago
+// Formato: PLAN-CÓDIGO (ej: PRO-ABC123)
+// Para agregar nuevos códigos, edita este objeto
+const CODIGOS_VALIDOS = {
+  // Códigos de ejemplo — reemplaza con los tuyos
+  'VERIFIA-EST-2026': { plan: 'estudiante', meses: 1, usos: 999 },
+  'VERIFIA-PRO-2026': { plan: 'profesional', meses: 1, usos: 999 },
+  'DEMO-ESTUDIANTE':  { plan: 'estudiante', meses: 1, usos: 999 },
+  'DEMO-PRO':         { plan: 'profesional', meses: 1, usos: 999 },
+};
+
+function abrirActivacion() {
+  document.getElementById('modal-activacion').style.display = 'flex';
+  setTimeout(() => document.getElementById('codigo-input').focus(), 150);
+}
+function cerrarActivacion() {
+  document.getElementById('modal-activacion').style.display = 'none';
+  document.getElementById('codigo-input').value = '';
+  document.getElementById('codigo-error').style.display = 'none';
+  document.getElementById('codigo-ok').style.display = 'none';
+}
+function activarCodigo() {
+  const codigo = document.getElementById('codigo-input').value.trim().toUpperCase();
+  const usados = JSON.parse(localStorage.getItem('verifia_usados') || '[]');
+
+  if (usados.includes(codigo)) {
+    mostrarError('Este código ya fue usado.');
+    return;
+  }
+  if (!CODIGOS_VALIDOS[codigo]) {
+    mostrarError('Código inválido. Verifica e intenta de nuevo.');
+    return;
+  }
+
+  const info = CODIGOS_VALIDOS[codigo];
+  usados.push(codigo);
+  localStorage.setItem('verifia_usados', JSON.stringify(usados));
+  localStorage.setItem('verifia_pro', 'true');
+  localStorage.setItem('verifia_plan', info.plan);
+  esPro = true;
+  usosRestantes = 999;
+  localStorage.setItem('verifia_usos', 999);
+  actualizarUI();
+
+  document.getElementById('codigo-error').style.display = 'none';
+  document.getElementById('codigo-ok').style.display = 'block';
+  document.getElementById('codigo-ok').textContent = `✅ ¡Plan ${info.plan.toUpperCase()} activado! Ya puedes usar VerifIA sin límites.`;
+  setTimeout(() => cerrarActivacion(), 2500);
+}
+function mostrarError(msg) {
+  const el = document.getElementById('codigo-error');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+// ── PANEL ADMIN (para generar códigos) ────────────────────
+function abrirAdmin() {
+  const pin = prompt('PIN de administrador:');
+  if (pin !== 'VERIFIA2026') { alert('PIN incorrecto.'); return; }
+  document.getElementById('modal-admin').style.display = 'flex';
+}
+function cerrarAdmin() {
+  document.getElementById('modal-admin').style.display = 'none';
+}
+function generarCodigo() {
+  const plan = document.getElementById('admin-plan').value;
+  const prefijos = { estudiante: 'EST', profesional: 'PRO' };
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let random = '';
+  for (let i = 0; i < 6; i++) random += chars[Math.floor(Math.random() * chars.length)];
+  const codigo = `VERIFIA-${prefijos[plan]}-${random}`;
+  document.getElementById('codigo-generado').value = codigo;
+}
+function copiarCodigo() {
+  const c = document.getElementById('codigo-generado').value;
+  if (!c) { alert('Primero genera un código.'); return; }
+  navigator.clipboard.writeText(c).then(() => alert('✅ Código copiado: ' + c));
+}
+</script>
+
+<!-- MODAL ACTIVACIÓN -->
+<div id="modal-activacion" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:20px;padding:28px 24px;width:90%;max-width:380px;text-align:center;">
+    <div style="font-size:36px;margin-bottom:12px">🔑</div>
+    <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;margin-bottom:6px">Activar plan</div>
+    <p style="font-size:13px;color:#888;margin-bottom:20px">Ingresa el código que recibiste al realizar tu pago</p>
+    <input id="codigo-input" type="text" placeholder="Ej: VERIFIA-PRO-ABC123"
+      style="width:100%;padding:14px;border:2px solid #e8e4dc;border-radius:10px;font-family:'Space Mono',monospace;font-size:15px;text-align:center;outline:none;text-transform:uppercase;margin-bottom:10px"
+      onfocus="this.style.borderColor='#2d5be3'" onblur="this.style.borderColor='#e8e4dc'"
+      onkeydown="if(event.key==='Enter')activarCodigo()">
+    <div id="codigo-error" style="display:none;color:#e85d2d;font-size:13px;margin-bottom:8px;"></div>
+    <div id="codigo-ok" style="display:none;color:#1a7a4a;font-size:13px;margin-bottom:8px;font-weight:700;"></div>
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <button onclick="cerrarActivacion()" style="flex:1;padding:12px;border:1.5px solid #e8e4dc;border-radius:10px;background:none;font-family:'Space Grotesk',sans-serif;font-size:14px;cursor:pointer;color:#888;">Cancelar</button>
+      <button onclick="activarCodigo()" style="flex:1;padding:12px;background:#2d5be3;color:#fff;border:none;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Activar →</button>
+    </div>
+    <p style="font-size:12px;color:#aaa;margin-top:14px">¿No tienes código? <a href="https://wa.me/593000000000" style="color:#2d5be3">Contáctanos por WhatsApp</a></p>
+  </div>
+</div>
+
+<!-- MODAL ADMIN -->
+<div id="modal-admin" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:#1a1a2e;border-radius:20px;padding:28px 24px;width:90%;max-width:380px;color:#fff;">
+    <div style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;margin-bottom:20px;color:#6ee7ff;">⚙️ Panel Administrador</div>
+    <div style="font-size:12px;color:#888;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Plan</div>
+    <select id="admin-plan" style="width:100%;padding:12px;background:#2a2a3e;border:1px solid #333;border-radius:8px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:14px;margin-bottom:14px;outline:none;">
+      <option value="estudiante">Estudiante — $4.99/mes</option>
+      <option value="profesional">Profesional — $9.99/mes</option>
+    </select>
+    <button onclick="generarCodigo()" style="width:100%;padding:12px;background:#2d5be3;color:#fff;border:none;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;">🎲 Generar código</button>
+    <div style="font-size:12px;color:#888;margin-bottom:6px;">Código generado:</div>
+    <div style="display:flex;gap:8px;">
+      <input id="codigo-generado" readonly placeholder="Aquí aparecerá el código"
+        style="flex:1;padding:12px;background:#2a2a3e;border:1px solid #333;border-radius:8px;color:#6ee7ff;font-family:'Space Mono',monospace;font-size:13px;outline:none;">
+      <button onclick="copiarCodigo()" style="padding:12px 16px;background:#333;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:16px;">📋</button>
+    </div>
+    <div style="font-size:12px;color:#666;margin-top:10px;">💡 Envía este código al cliente por WhatsApp tras confirmar el pago.</div>
+    <button onclick="cerrarAdmin()" style="width:100%;padding:12px;background:transparent;color:#888;border:1px solid #333;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:14px;cursor:pointer;margin-top:14px;">Cerrar</button>
+  </div>
+</div>
+
+<!-- BOTÓN FLOTANTE ACTIVAR -->
+<div style="position:fixed;bottom:20px;right:20px;display:flex;flex-direction:column;gap:10px;z-index:100;">
+  <button onclick="abrirActivacion()" style="padding:12px 18px;background:#2d5be3;color:#fff;border:none;border-radius:50px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(45,91,227,.4);">🔑 Tengo un código</button>
+  <button onclick="abrirAdmin()" style="padding:10px 16px;background:#1a1a2e;color:#6ee7ff;border:1px solid #333;border-radius:50px;font-family:'Space Grotesk',sans-serif;font-size:11px;cursor:pointer;">⚙️ Admin</button>
+</div>
+
+</body>
+</html>
